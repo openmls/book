@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>OpenMLS Projects - OpenMLS Book</title>
+        <title>Type-Enforced Verification - OpenMLS Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="openmls_projects.html" class="active"><strong aria-hidden="true">1.</strong> OpenMLS Projects</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="message_validation.html"><strong aria-hidden="true">1.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">2.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html" class="active"><strong aria-hidden="true">3.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,18 +134,47 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="openmls-projects"><a class="header" href="#openmls-projects">OpenMLS Projects</a></h1>
+                        <h1 id="type-enforced-verification"><a class="header" href="#type-enforced-verification">Type-Enforced Verification</a></h1>
+<p>We use Rust's type checker to achieve additional security guarantees regarding
+the signing and verification of structs. There are four traits:</p>
+<ul>
+<li><code>Signable</code>: A payload that the sender/signer of a message can create. The
+trait provides a <code>sign</code> function that produces a <code>SignedStruct</code>.</li>
+<li><code>SignedStruct</code>: The result of signing a <code>Signable</code> struct. This struct can
+actually be encoded and sent over the wire. The <code>SignedStruct</code> does not
+necessarily contain all the information required to sign or verify the struct.</li>
+<li><code>Verifiable</code>: A payload, potentially received from the wire with a signature
+and all information required to verify the struct. When receiving a
+<code>SignedStruct</code>, the receiver can add additional information required to make
+the struct verifiable. Provides a <code>verify</code> function.</li>
+<li><code>VerifiedStruct</code>: The result of calling the <code>verify</code> function on a
+<code>Verifiable</code> struct. The <code>VerifiedStruct</code> is what is accepted by further
+processing functions on the receiving side.</li>
+</ul>
+<p><img src="./static/signable.svg" alt="Traits around signing and verification in OpenMLS." /></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="tree_rewrite.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="performance.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="tree_rewrite.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="performance.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
