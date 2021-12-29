@@ -4,3 +4,4 @@
 - [Tree Rewrite Project](./tree_rewrite.md)
 - [Type-Enforced Verification](./type_enfored_verification.md)
 - [Performance](./performance.md)
+- [Forward Secrecy](./forward_secrecy.md)
