@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title></title>
-        <base href="/">
+        <title>Forward Secrecy - OpenMLS Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="message_validation.html"><strong aria-hidden="true">1.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">2.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">3.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="message_validation.html"><strong aria-hidden="true">1.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">2.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">3.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html" class="active"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,19 +134,50 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="forward-secrecy"><a class="header" href="#forward-secrecy">Forward Secrecy</a></h1>
+<p>To achieve forward secrecy, OpenMLS drops key material immediately after a given
+key is no longer required by the protocol. For some keys this is simple, as they
+are used only once and there is no need to store them for later use. However,
+for other keys, the time of deletion is a result of a trade-off between
+functionality and forward secrecy. For example, it can be desirable to keep the
+<code>SecretTree</code> of past epochs for a while to allow decryption of straggling
+application messages sent in previous epochs.</p>
+<p>In this chapter, we detail how we achieve forward secrecy for the different types of keys used throughout MLS.</p>
+<h2 id="ratchet-tree"><a class="header" href="#ratchet-tree">Ratchet Tree</a></h2>
+<p>The ratchet tree contains the secret key material of the client's leaf, as well
+(potentially) that of nodes in its direct path. The secrets in the tree are
+changed in the same way as the tree itself: via the merge of a previously
+prepared diff.</p>
+<h3 id="commit-creation"><a class="header" href="#commit-creation">Commit Creation</a></h3>
+<p>Upon the creation of a commit, any fresh key material introduced by the
+committer is stored in the diff. It exists alongside the key material of the
+ratchet tree before the commit until the client merges the diff, upon which the
+key material in the original ratchet tree is dropped.</p>
+<h3 id="commit-processing"><a class="header" href="#commit-processing">Commit Processing</a></h3>
+<p>Upon receiving a commit from another group member, the client processes the
+commit until they have a <code>StagedCommit</code>, which in turn contains a ratchet tree
+diff. The diff contains any potential key material they decrypted from the
+commit, as well as any potential key material that was introduced to the tree as
+part of an update that someone else committed for them. The key material in the
+original ratchet tree is dropped as soon as the <code>StagedCommit</code> (and thus the
+diff) is merged into the tree.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="performance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="performance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
             </nav>
 
         </div>
