@@ -13,16 +13,16 @@
 
 | ValidationStep | Description                                                 | Implemented | Tested | Test File                                    |
 | -------------- | ----------------------------------------------------------- | ----------- | ------ | -------------------------------------------- |
-| `ValSem1`      | Wire format                                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem2`      | Group id                                                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem3`      | Epoch                                                       | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem4`      | Sender: Member: check the sender points to a non-blank leaf | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem5`      | Application messages must use ciphertext                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem6`      | Ciphertext: decryption needs to work                        | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem7`      | Membership tag presence                                     | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem8`      | Membership tag verification                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem9`      | Confirmation tag presence                                   | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
-| `ValSem10`     | Signature verification                                      | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem001`    | Wire format                                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem002`    | Group id                                                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem003`    | Epoch                                                       | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem004`    | Sender: Member: check the sender points to a non-blank leaf | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem005`    | Application messages must use ciphertext                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem006`    | Ciphertext: decryption needs to work                        | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem007`    | Membership tag presence                                     | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem008`    | Membership tag verification                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem009`    | Confirmation tag presence                                   | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem010`    | Signature verification                                      | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
 
 ### Semantic validation of proposals covered by a Commit
 
