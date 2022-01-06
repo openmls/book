@@ -28,17 +28,17 @@
 
 | ValidationStep | Description                                                                                 | Implemented    | Tested | Test File |
 | -------------- | ------------------------------------------------------------------------------------------- | -------------- | ------ | --------- |
-| `ValSem100`    | Add Proposal: Identity in proposals must be unique among proposals                          | ✅             | ❌     | 🈳        |
-| `ValSem101`    | Add Proposal: Signature public key in proposals must be unique among proposals              | ✅             | ❌     | 🈳        |
-| `ValSem102`    | Add Proposal: HPKE init key in proposals must be unique among proposals                     | ✅             | ❌     | 🈳        |
-| `ValSem103`    | Add Proposal: Identity in proposals must be unique among existing group members             | ✅             | ❌     | 🈳        |
-| `ValSem104`    | Add Proposal: Signature public key in proposals must be unique among existing group members | ✅             | ❌     | 🈳        |
-| `ValSem105`    | Add Proposal: HPKE init key in proposals must be unique among existing group members        | ✅             | ❌     | 🈳        |
-| `ValSem106`    | Add Proposal: required capabilities                                                         | ❌<sup>1</sup> | ❌     | 🈳        |
-| `ValSem107`    | Remove Proposal: Removed member must be unique among proposals                              | ✅             | ❌     | 🈳        |
-| `ValSem108`    | Remove Proposal: Removed member must be an existing group member                            | ✅             | ❌     | 🈳        |
-| `ValSem109`    | Update Proposal: Identity must be unchanged between existing member and new proposal        | ✅             | ❌     | 🈳        |
-| `ValSem110`    | Update Proposal: HPKE init key must be unique among existing members                        | ✅             | ❌     | 🈳        |
+| `ValSem100`    | Add Proposal: Identity in proposals must be unique among proposals                          | ✅             | ❌     | TBD       |
+| `ValSem101`    | Add Proposal: Signature public key in proposals must be unique among proposals              | ✅             | ❌     | TBD       |
+| `ValSem102`    | Add Proposal: HPKE init key in proposals must be unique among proposals                     | ✅             | ❌     | TBD       |
+| `ValSem103`    | Add Proposal: Identity in proposals must be unique among existing group members             | ✅             | ❌     | TBD       |
+| `ValSem104`    | Add Proposal: Signature public key in proposals must be unique among existing group members | ✅             | ❌     | TBD       |
+| `ValSem105`    | Add Proposal: HPKE init key in proposals must be unique among existing group members        | ✅             | ❌     | TBD       |
+| `ValSem106`    | Add Proposal: required capabilities                                                         | ❌<sup>1</sup> | ❌     | TBD       |
+| `ValSem107`    | Remove Proposal: Removed member must be unique among proposals                              | ✅             | ❌     | TBD       |
+| `ValSem108`    | Remove Proposal: Removed member must be an existing group member                            | ✅             | ❌     | TBD       |
+| `ValSem109`    | Update Proposal: Identity must be unchanged between existing member and new proposal        | ✅             | ❌     | TBD       |
+| `ValSem110`    | Update Proposal: HPKE init key must be unique among existing members                        | ✅             | ❌     | TBD       |
 
 <sup>1</sup> Partly implemented, see `TODO`s in `openmls/src/group/core_group/validation.rs`.
 
@@ -46,12 +46,12 @@
 
 | ValidationStep | Description                                                                            | Implemented | Tested | Test File |
 | -------------- | -------------------------------------------------------------------------------------- | ----------- | ------ | --------- |
-| `ValSem200`    | Commit must not cover inline self Remove proposal                                      | ✅          | ❌     | 🈳        |
-| `ValSem201`    | Path must be present, if Commit contains Removes or Updates                            | ❌          | ❌     | 🈳        |
-| `ValSem202`    | Path must be the right length                                                          | ❌          | ❌     | 🈳        |
-| `ValSem203`    | Path secrets must decrypt correctly                                                    | ❌          | ❌     | 🈳        |
-| `ValSem204`    | Public keys from Path must be verified and match the private keys from the direct path | ✅          | ❌     | 🈳        |
-| `ValSem205`    | Confirmation tag must be successfully verified                                         | ✅          | ❌     | 🈳        |
+| `ValSem200`    | Commit must not cover inline self Remove proposal                                      | ✅          | ❌     | TBD       |
+| `ValSem201`    | Path must be present, if Commit contains Removes or Updates                            | ❌          | ❌     | TBD       |
+| `ValSem202`    | Path must be the right length                                                          | ❌          | ❌     | TBD       |
+| `ValSem203`    | Path secrets must decrypt correctly                                                    | ❌          | ❌     | TBD       |
+| `ValSem204`    | Public keys from Path must be verified and match the private keys from the direct path | ✅          | ❌     | TBD       |
+| `ValSem205`    | Confirmation tag must be successfully verified                                         | ✅          | ❌     | TBD       |
 
 ## API
 
