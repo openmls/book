@@ -9,38 +9,49 @@
 
 ## Detailed list of validation steps
 
- - MLSCiphertext:
-   - group id must exist (usually checked by the DS already)
-   - epoch must be within bounds
-   - AAD can be extracted/evaluated
-   - attempt decryption -> return MLSPlaintext and go to phase 2 (note that this modifies the SecretTree and is only guaranteed to work once, persistence)
- - MLSPlaintext:
-   - Phase 1 (only if it was *not* decrypted from an MLSCiphertext)
-     - group id must exist (usually checked by the DS already)
-     - epoch must be within bounds
-     - content_type must not be application
-     - AAD can be extracted/evaluated
-     - IFF sender is a group member, membership_tag must be present & successfully validated
-   - Phase 2
-     - IFF content_type is a commit, confirmation_tag must be present
-     - Signature verification: Requires the AS (potentially blocking & persistence step might be required)
-     - subsequent steps depend on content_type
- - Content type: Application
- - Content type: Proposal
-   - Semantic checks:
-     - Add Proposal: Double join
-     - Remove Proposal: Ghost removal
-     - Update Proposal: Identity must be unchanged
-   - Operations like Add, Remove must be validated by AS: (potentially blocking & persistence step might be required)
- - Content type: Commit
-   - all proposals (either inline or referenced) must be valid (see Content type: Proposal) potentially blocking & persistence step might be required)
-   - Commit must not cover inline self Remove proposal
-   - Path must be present, unless Commit only covers Add Proposals
-   - Path must be the right length
-   - Staging step: proposals must be applied to modify the provisional tree
-   - Path must be applied and decrypt correctly
-   - New public keys from Path must be verified and match the private keys from the direct path
-   - Confirmation tag must be successfully verified
+### Semantic validation of message framing
+
+| ValidationStep | Description                                                 | Implemented | Tested | Test File                                    |
+| -------------- | ----------------------------------------------------------- | ----------- | ------ | -------------------------------------------- |
+| `ValSem001`    | Wire format                                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem002`    | Group id                                                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem003`    | Epoch                                                       | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem004`    | Sender: Member: check the sender points to a non-blank leaf | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem005`    | Application messages must use ciphertext                    | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem006`    | Ciphertext: decryption needs to work                        | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem007`    | Membership tag presence                                     | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem008`    | Membership tag verification                                 | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem009`    | Confirmation tag presence                                   | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+| `ValSem010`    | Signature verification                                      | ✅          | ✅     | `openmls/src/group/tests/test_validation.rs` |
+
+### Semantic validation of proposals covered by a Commit
+
+| ValidationStep | Description                                                                                 | Implemented    | Tested | Test File |
+| -------------- | ------------------------------------------------------------------------------------------- | -------------- | ------ | --------- |
+| `ValSem100`    | Add Proposal: Identity in proposals must be unique among proposals                          | ✅             | ❌     | TBD       |
+| `ValSem101`    | Add Proposal: Signature public key in proposals must be unique among proposals              | ✅             | ❌     | TBD       |
+| `ValSem102`    | Add Proposal: HPKE init key in proposals must be unique among proposals                     | ✅             | ❌     | TBD       |
+| `ValSem103`    | Add Proposal: Identity in proposals must be unique among existing group members             | ✅             | ❌     | TBD       |
+| `ValSem104`    | Add Proposal: Signature public key in proposals must be unique among existing group members | ✅             | ❌     | TBD       |
+| `ValSem105`    | Add Proposal: HPKE init key in proposals must be unique among existing group members        | ✅             | ❌     | TBD       |
+| `ValSem106`    | Add Proposal: required capabilities                                                         | ❌<sup>1</sup> | ❌     | TBD       |
+| `ValSem107`    | Remove Proposal: Removed member must be unique among proposals                              | ✅             | ❌     | TBD       |
+| `ValSem108`    | Remove Proposal: Removed member must be an existing group member                            | ✅             | ❌     | TBD       |
+| `ValSem109`    | Update Proposal: Identity must be unchanged between existing member and new proposal        | ✅             | ❌     | TBD       |
+| `ValSem110`    | Update Proposal: HPKE init key must be unique among existing members                        | ✅             | ❌     | TBD       |
+
+<sup>1</sup> Partly implemented, see `TODO`s in `openmls/src/group/core_group/validation.rs`.
+
+### Commit message validation
+
+| ValidationStep | Description                                                                            | Implemented | Tested | Test File |
+| -------------- | -------------------------------------------------------------------------------------- | ----------- | ------ | --------- |
+| `ValSem200`    | Commit must not cover inline self Remove proposal                                      | ✅          | ❌     | TBD       |
+| `ValSem201`    | Path must be present, if Commit contains Removes or Updates                            | ❌          | ❌     | TBD       |
+| `ValSem202`    | Path must be the right length                                                          | ❌          | ❌     | TBD       |
+| `ValSem203`    | Path secrets must decrypt correctly                                                    | ❌          | ❌     | TBD       |
+| `ValSem204`    | Public keys from Path must be verified and match the private keys from the direct path | ✅          | ❌     | TBD       |
+| `ValSem205`    | Confirmation tag must be successfully verified                                         | ✅          | ❌     | TBD       |
 
 ## API
 
