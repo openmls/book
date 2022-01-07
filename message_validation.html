@@ -143,61 +143,43 @@
 <li>AS/policy validation: Checks to see whether syntactically and semantically correct messages should be adopted or dropped (Is a member allowed to add another member? Is a member allowed to remove another member?)</li>
 </ul>
 <h2 id="detailed-list-of-validation-steps"><a class="header" href="#detailed-list-of-validation-steps">Detailed list of validation steps</a></h2>
-<ul>
-<li>MLSCiphertext:
-<ul>
-<li>group id must exist (usually checked by the DS already)</li>
-<li>epoch must be within bounds</li>
-<li>AAD can be extracted/evaluated</li>
-<li>attempt decryption -&gt; return MLSPlaintext and go to phase 2 (note that this modifies the SecretTree and is only guaranteed to work once, persistence)</li>
-</ul>
-</li>
-<li>MLSPlaintext:
-<ul>
-<li>Phase 1 (only if it was <em>not</em> decrypted from an MLSCiphertext)
-<ul>
-<li>group id must exist (usually checked by the DS already)</li>
-<li>epoch must be within bounds</li>
-<li>content_type must not be application</li>
-<li>AAD can be extracted/evaluated</li>
-<li>IFF sender is a group member, membership_tag must be present &amp; successfully validated</li>
-</ul>
-</li>
-<li>Phase 2
-<ul>
-<li>IFF content_type is a commit, confirmation_tag must be present</li>
-<li>Signature verification: Requires the AS (potentially blocking &amp; persistence step might be required)</li>
-<li>subsequent steps depend on content_type</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Content type: Application</li>
-<li>Content type: Proposal
-<ul>
-<li>Semantic checks:
-<ul>
-<li>Add Proposal: Double join</li>
-<li>Remove Proposal: Ghost removal</li>
-<li>Update Proposal: Identity must be unchanged</li>
-</ul>
-</li>
-<li>Operations like Add, Remove must be validated by AS: (potentially blocking &amp; persistence step might be required)</li>
-</ul>
-</li>
-<li>Content type: Commit
-<ul>
-<li>all proposals (either inline or referenced) must be valid (see Content type: Proposal) potentially blocking &amp; persistence step might be required)</li>
-<li>Commit must not cover inline self Remove proposal</li>
-<li>Path must be present, unless Commit only covers Add Proposals</li>
-<li>Path must be the right length</li>
-<li>Staging step: proposals must be applied to modify the provisional tree</li>
-<li>Path must be applied and decrypt correctly</li>
-<li>New public keys from Path must be verified and match the private keys from the direct path</li>
-<li>Confirmation tag must be successfully verified</li>
-</ul>
-</li>
-</ul>
+<h3 id="semantic-validation-of-message-framing"><a class="header" href="#semantic-validation-of-message-framing">Semantic validation of message framing</a></h3>
+<table><thead><tr><th>ValidationStep</th><th>Description</th><th>Implemented</th><th>Tested</th><th>Test File</th></tr></thead><tbody>
+<tr><td><code>ValSem001</code></td><td>Wire format</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem002</code></td><td>Group id</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem003</code></td><td>Epoch</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem004</code></td><td>Sender: Member: check the sender points to a non-blank leaf</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem005</code></td><td>Application messages must use ciphertext</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem006</code></td><td>Ciphertext: decryption needs to work</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem007</code></td><td>Membership tag presence</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem008</code></td><td>Membership tag verification</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem009</code></td><td>Confirmation tag presence</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+<tr><td><code>ValSem010</code></td><td>Signature verification</td><td>✅</td><td>✅</td><td><code>openmls/src/group/tests/test_validation.rs</code></td></tr>
+</tbody></table>
+<h3 id="semantic-validation-of-proposals-covered-by-a-commit"><a class="header" href="#semantic-validation-of-proposals-covered-by-a-commit">Semantic validation of proposals covered by a Commit</a></h3>
+<table><thead><tr><th>ValidationStep</th><th>Description</th><th>Implemented</th><th>Tested</th><th>Test File</th></tr></thead><tbody>
+<tr><td><code>ValSem100</code></td><td>Add Proposal: Identity in proposals must be unique among proposals</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem101</code></td><td>Add Proposal: Signature public key in proposals must be unique among proposals</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem102</code></td><td>Add Proposal: HPKE init key in proposals must be unique among proposals</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem103</code></td><td>Add Proposal: Identity in proposals must be unique among existing group members</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem104</code></td><td>Add Proposal: Signature public key in proposals must be unique among existing group members</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem105</code></td><td>Add Proposal: HPKE init key in proposals must be unique among existing group members</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem106</code></td><td>Add Proposal: required capabilities</td><td>❌<sup>1</sup></td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem107</code></td><td>Remove Proposal: Removed member must be unique among proposals</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem108</code></td><td>Remove Proposal: Removed member must be an existing group member</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem109</code></td><td>Update Proposal: Identity must be unchanged between existing member and new proposal</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem110</code></td><td>Update Proposal: HPKE init key must be unique among existing members</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+</tbody></table>
+<p><sup>1</sup> Partly implemented, see <code>TODO</code>s in <code>openmls/src/group/core_group/validation.rs</code>.</p>
+<h3 id="commit-message-validation"><a class="header" href="#commit-message-validation">Commit message validation</a></h3>
+<table><thead><tr><th>ValidationStep</th><th>Description</th><th>Implemented</th><th>Tested</th><th>Test File</th></tr></thead><tbody>
+<tr><td><code>ValSem200</code></td><td>Commit must not cover inline self Remove proposal</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem201</code></td><td>Path must be present, if Commit contains Removes or Updates</td><td>❌</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem202</code></td><td>Path must be the right length</td><td>❌</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem203</code></td><td>Path secrets must decrypt correctly</td><td>❌</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem204</code></td><td>Public keys from Path must be verified and match the private keys from the direct path</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+<tr><td><code>ValSem205</code></td><td>Confirmation tag must be successfully verified</td><td>✅</td><td>❌</td><td>TBD</td></tr>
+</tbody></table>
 <h2 id="api"><a class="header" href="#api">API</a></h2>
 <p><em><a href="https://docs.google.com/document/d/1mtA7nqfh1v2guvh-7fGYEYAWaFDdLvf4i9n602RL0iE/edit?usp=sharing">temporary discussion doc</a></em></p>
 <pre><pre class="playground"><code class="language-rust">
