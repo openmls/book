@@ -14,8 +14,6 @@ jobs:
         uses: peaceiris/actions-mdbook@v1
         with:
           mdbook-version: 'latest'
-
-      - name: Build mdBook
       - run: |
           git clone https://github.com/openmls/openmls
           cd openmls/book
