@@ -1,10 +1,6 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [repository_dispatch]
 
 jobs:
   deploy:
@@ -19,11 +15,15 @@ jobs:
         with:
           mdbook-version: 'latest'
 
-      - run: mdbook build
+      - name: Build mdBook
+      - run: |
+          git clone https://github.com/openmls/openmls
+          cd openmls/book
+          mdbook build 
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && github.event.action == 'deploy'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./book
+          publish_dir: ./openmls/book/book
