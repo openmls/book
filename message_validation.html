@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="message_validation.html" class="active"><strong aria-hidden="true">1.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">2.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">3.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="user_manual/remove_members.html"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="user_manual/processing.html"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li></ol></li><li class="chapter-item expanded "><a href="message_validation.html" class="active"><strong aria-hidden="true">2.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">3.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">4.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">5.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html"><strong aria-hidden="true">6.</strong> Forward Secrecy</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -180,222 +180,14 @@
 <tr><td><code>ValSem204</code></td><td>Public keys from Path must be verified and match the private keys from the direct path</td><td>✅</td><td>❌</td><td>TBD</td></tr>
 <tr><td><code>ValSem205</code></td><td>Confirmation tag must be successfully verified</td><td>✅</td><td>❌</td><td>TBD</td></tr>
 </tbody></table>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
-<p><em><a href="https://docs.google.com/document/d/1mtA7nqfh1v2guvh-7fGYEYAWaFDdLvf4i9n602RL0iE/edit?usp=sharing">temporary discussion doc</a></em></p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl ManagedGroup {
-  fn parse_message(&amp;mut self, mls_message: MlsMessage) -&gt; Result&lt;UnverifiedMessage, ManagedGroupError&gt; {
-    /*
-     - epoch must be within bounds
-     - AAD can be extracted/evaluated
-     - decryption
-     - IFF content_type is a commit, confirmation_tag must be present
-    */
-  }
-
-  fn process_unverified_message(&amp;self, message: UnverifiedMessage, signature_key: Option&lt;SignatureKey&gt;) -&gt; Result&lt;ProcessedMessage, ManagedGroupError&gt; {
-    /*
-     - Signature verification, either with leaf key or optional parameter
-     - IF Commit:
-       - Extract all inline &amp; pending proposals
-     - Semantic validation of all proposals
-       - IF Add Proposal: Double join check
-       - IF Remove Proposal: Ghost removal check
-       - IF Update Proposal: Identity must be unchanged
-     - IF Commit:
-       - Commit must not cover inline self Remove proposal
-       - Path must be present, unless Commit only covers Add Proposals
-       - Path must be the right length
-       - Staging step: proposals must be applied to modify the provisional tree
-       - Path must be applied and decrypt correctly
-       - New public keys from Path must be verified and match the private keys from the direct path
-       - Confirmation tag must be successfully verified
-    */
-  }
-
-  fn store_pending_proposal(&amp;mut self, pending_proposal: PendingProposal) -&gt; () {
-  /*
-   - Store proposal in pending proposal list
-  */
-  }
-
-  fn merge_staged_commit(&amp;mut self, staged_commit: StagedCommit, psks: &amp;[Psks]) -&gt; Result&lt;(), ManagedGroupError&gt; {
-    /*
-     - Merge staged Commit values into internal group stage
-    */
-  }
-}
-
-enum MlsMessage {
-  Ciphertext(MlsCiphertext),
-  Plaintext(MlsPlaintext),
-}
-
-impl UnverifiedMessage {
-  fn aad(&amp;self) -&gt; &amp;[u8] {}
-  fn credential(&amp;self) -&gt; &amp;Credential {}
-}
-
-enum ProcessedMessage {
-  ApplicationMessage(Vec&lt;u8&gt;),
-  ProposalMessage(PendingProposal),
-  StagedCommitMessage(StagedCommit),
-}
-
-enum PendingProposal {
-  Add(PendingAddProposal),
-  Remove(PendingRemoveProposal),
-  Update(PendingRemoveProposal),
-  Psk(PendingPskProposal),
-}
-
-impl StagedCommit {
-  fn adds(&amp;self) -&gt; &amp;[PendingAddProposal] {}
-  fn removes(&amp;self) -&gt; &amp;[PendingRemoveProposal] {}
-  fn updates(&amp;self) -&gt; &amp;[PendingUpdate] {}
-  fn psks(&amp;self) -&gt; &amp;[PendingPskProposal] {}
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="example-api-usage"><a class="header" href="#example-api-usage">Example API usage</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// Parse either MlsPlaintext or MlsCiphertext
-let unverified_message = group.pares_message(mls_message).expect(&quot;E1&quot;);
-
-// Inspect AAD (optional)
-if unverified_message.aad() == &amp;[1, 2, 3] {}
-
-// Inspect credential and fetch signature key from AS (optional)
-let signature_key = AuthenticationService::get_key(unverified_message.credential());
-
-let processed_message = group.process_unverified_message(unverified_message, Some(signature_key)).expect(&quot;E2&quot;);
-
-match processed_message {
-  ApplicationMessage(bytes) =&gt; {
-    // Do something with application message.
-    // No further interaction with the group is needed.
-  },
-  ProposalMessage(pending_proposal) =&gt; {
-    // We can optionally inspect the proposal before we store it in the group:
-    match &amp;pending_proposal {
-      Add(pending_add_proposal) =&gt; {
-        // Do a policy check on that proposal
-      },
-      // Other type of propsals
-      _ =&gt; {},
-    }
-    // After the optional inspection we store the pending proposal in the group
-    group.store_pending_proposal(pending_proposal);
-  }
-  StagedCommitMessage(staged_commit) =&gt; {
-    // We can optionally inspect all proposals covered by the Commit message before we merge it into the group:
-    for add_proposal in &amp;staged_commit.adds() {
-      // Inspect add proposals here
-    }
-    // Inspect PSKs and get them from a store:
-    let psks = staged_commit.psks.iter().map(|p| PskStore::fetch_psk(p)).collect();
-    // Merge the staged commit into the group
-    group.merge_staged_commit(staged_commit, psks).expect(&quot;E3&quot;);
-  }
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h1 id="legacy-stuff"><a class="header" href="#legacy-stuff">Legacy stuff</a></h1>
-<h3 id="validation-function"><a class="header" href="#validation-function">Validation function</a></h3>
-<p>The validation function has access to the inner state of a <code>ManagedGroup</code> and takes any inbound message from the DS as input. The messages are processed as follows:</p>
-<h4 id="application-messages"><a class="header" href="#application-messages">Application messages</a></h4>
-<p>The message is checked and marked as either valid or invalid.</p>
-<h4 id="proposals"><a class="header" href="#proposals">Proposals</a></h4>
-<p>The message is checked and marked as either valid or invalid. Proposals are stored inside a <code>ManagedGroup</code> and only evaluated when a Commit message is processed.</p>
-<h4 id="commits"><a class="header" href="#commits">Commits</a></h4>
-<p>The message is checked and marked as either valid, invalid or pending validation. If the Commit message covers proposals that require validation by the AS, a <code>PendingValidationMessage</code> type message is returned. The list of operations in that message covers all relevant proposals that were previously received in the current epoch.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl ManagedGroup {
-    ...
-    fn validate(&amp;mut self, mls_message: MlsMessage) -&gt; EvaluatedMessage { ... }
-    ...
-}
-
-enum MlsMessage {
-    Plaintext(MlsPlaintext),
-    Ciphertext(MlsCiphertext),
-}
-
-enum EvaluatedMessage {
-    ValidMessage(ValidPlaintextMessage),
-    PendingValidation(PendingValidationMessage),
-    InvalidMessage(InvalidMessageDetails),
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="valid-messages"><a class="header" href="#valid-messages">Valid messages</a></h3>
-<p>Valid messages are either automatically valid if they passed all checks, or can be converted from <code>PendingValidationMessage</code> by manual validation.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct ValidPlaintextMessage(MlsPlaintext)
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="messages-pending-validation"><a class="header" href="#messages-pending-validation">Messages pending validation</a></h3>
-<p>Messages are marked as pending validation if input from the AS is required.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct PendingValidationMessage {
-    message: MlsPlaintext,
-    operations: Vec&lt;OperationType&gt;,
-}
-
-impl PendingValidationMessage {
-    fn validate(&amp;self) -&gt; ValidPlaintextMessage { ... }
-}
-
-enum OperationType {
-    Add(AddOperation),
-    Remove(RemoveOperation),
-    Join(JoinOperation),
-    Leave(LeaveOperation),
-    Psk(PskOperation),
-}
-
-struct AddOperation { ... }
-...
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="invalid-messages"><a class="header" href="#invalid-messages">Invalid messages</a></h3>
-<p>Messages that didn't pass the syntactic &amp; semantic checks are marked as invalid with a reason for their invalidity.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct InvalidMessageDetails {
-    sender: Option&lt;Sender&gt;,
-    reason: InvalidMessageReason,
-}
-
-enum InvalidMessageReason {
-    InvalidGroup,
-    InvalidGeneration,
-    InvalidCiphertext,
-    InvalidSignature,
-    InvalidMembershipTag,
-    DoubleJoin,
-    GhostRemoval,
-    InvalidUpdate,
-    ...
-}
-<span class="boring">}
-</span></code></pre></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="user_manual/processing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
                             <a rel="next" href="tree_rewrite.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
@@ -405,6 +197,9 @@ enum InvalidMessageReason {
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="user_manual/processing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
                     <a rel="next" href="tree_rewrite.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>

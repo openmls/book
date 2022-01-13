@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="message_validation.html"><strong aria-hidden="true">1.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">2.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">3.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="user_manual/remove_members.html"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="user_manual/processing.html"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li></ol></li><li class="chapter-item expanded "><a href="message_validation.html"><strong aria-hidden="true">2.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="tree_rewrite.html"><strong aria-hidden="true">3.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="type_enfored_verification.html"><strong aria-hidden="true">4.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">5.</strong> Performance</a></li><li class="chapter-item expanded "><a href="forward_secrecy.html"><strong aria-hidden="true">6.</strong> Forward Secrecy</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,7 +135,280 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="message-validation"><a class="header" href="#message-validation">Message Validation</a></h1>
+                        <h1 id="user-manual"><a class="header" href="#user-manual">User manual</a></h1>
+<p>The user manual describes how to use the different parts of the OpenMLS API.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-an-identity"><a class="header" href="#creating-an-identity">Creating an identity</a></h1>
+<p>Every client that wants to use OpenMLS needs to create an identity keypair initially.
+Clients need to choose a few parameters to create a <code>CredentialBundle</code>:</p>
+<ul>
+<li><code>identity: Vec&lt;u8&gt;</code>: An octet string that uniquely identifies the client.</li>
+<li><code>credential_type: CredentialType</code>: The type of the credential, e.g. <code>CredentialType::Basic</code>.</li>
+<li><code>signature_scheme: SignatureScheme</code>: The cryptographic primitive of the identity keypair, e.g. <code>SignatureScheme::ED25519</code>.</li>
+</ul>
+<pre><code class="language-rust no_run noplayground">    let credential_bundle =
+        CredentialBundle::new(identity, credential_type, signature_scheme, backend)?;
+</code></pre>
+<p>After creating the credential bundle, clients should store it in the key store so that it can be reused during group operations:</p>
+<pre><code class="language-rust no_run noplayground">    let credential = credential_bundle.credential().clone();
+    backend
+        .key_store()
+        .store(credential.signature_key(), &amp;credential_bundle)
+        .expect(&quot;An unexpected error occurred.&quot;);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-key-packges"><a class="header" href="#creating-key-packges">Creating key packges</a></h1>
+<p>Before clients can communicate with each other usind OpenMLS they need to generate key packages and publish them with the Delivery Service. Clients can generate an arbirary number of key packages ahead of time.</p>
+<p>Clients keep the private key material corresponding to a key package locally in the key store and fetch it from there when a key package was used to add them to a new group.</p>
+<p>Clients need to choose a few parameters to create a <code>KeyPackageBundle</code>:</p>
+<ul>
+<li><code>ciphersuites: &amp;[CiphersuiteName]</code>: A list of ciphersuites supported by the client.</li>
+<li><code>extensions: Vec&lt;Extensions&gt;</code>: A list of supported extensions.</li>
+</ul>
+<p>Clients must specify at least one ciphersuite, and must not advertize ciphersuites they do not support.</p>
+<p>Clients should specify all extensions they support. Mandatory extensions, like the <code>LifetimeExtension</code> can be specified here with specific values. If no extensions are specified, mandatory extensions are created on the fly with default values. See the documentation of extensions for more details.</p>
+<pre><code class="language-rust no_run noplayground">    // Define extensions
+    let extensions = vec![Extension::LifeTime(LifetimeExtension::new(
+        60 * 60 * 24 * 90, // Maximum lifetime of 90 days, expressed in seconds
+    ))];
+
+    // Fetch the credential bundle from the key store
+    let credential_bundle = backend
+        .key_store()
+        .read(credential.signature_key())
+        .expect(&quot;An unexpected error occurred.&quot;);
+
+    // Create the key package bundle
+    let key_package_bundle =
+        KeyPackageBundle::new(ciphersuites, &amp;credential_bundle, backend, extensions)?;
+</code></pre>
+<p>After creating the key package bundle, clients should store it in the key store so that it can be reused during group operations:</p>
+<pre><code class="language-rust no_run noplayground">    let key_package = key_package_bundle.key_package().clone();
+
+    // Store it in the key store
+    backend
+        .key_store()
+        .store(
+            &amp;key_package
+                .hash(backend)
+                .expect(&quot;Could not hash KeyPackage.&quot;),
+            &amp;key_package_bundle,
+        )
+        .expect(&quot;An unexpected error occurred.&quot;);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="group-configuration"><a class="header" href="#group-configuration">Group configuration</a></h1>
+<p>The group configuration can be specified by building a <code>MlsGroupConfig</code> object or choosing the default value. The default velaue contains safe values for all parameters and is suitable for scenarios whithout particular requirements.</p>
+<p>The following parameters can be set:</p>
+<table><thead><tr><th>Name</th><th>Type</th><th>Explanation</th></tr></thead><tbody>
+<tr><td><code>wire_format</code></td><td><code>WireFormat</code></td><td>Defines whether handshake messages are encrypted. The default <code>Ciphertext</code>.</td></tr>
+<tr><td><code>padding_size</code></td><td><code>usize</code></td><td>Size of padding in bytes. The default is 0.</td></tr>
+<tr><td><code>max_past_epochs</code></td><td><code>usize</code></td><td>Maximum number of past epochs for which application messages can be decrypted. The default is 0.</td></tr>
+<tr><td><code>number_of_resumption_secrets</code></td><td><code>usize</code></td><td>Number of resumtion secrets to keep. The default is 0.</td></tr>
+<tr><td><code>use_ratchet_tree_extension</code></td><td><code>bool</code></td><td>Flag indicating the Ratchet Tree Extension should be used. The default is <code>false</code>.</td></tr>
+<tr><td><code>required_capabilities</code></td><td><code>RequiredCapabilitiesExtension</code></td><td>Required capabilities (extensions and proposal types).</td></tr>
+<tr><td><code>sender_ratchet_configuration</code></td><td><code>SenderRatchetConfiguration</code></td><td>Sender ratchet configuration.</td></tr>
+</tbody></table>
+<p>Example configuration:</p>
+<pre><code class="language-rust no_run noplayground">    let mls_group_config = MlsGroupConfig::builder()
+        .padding_size(100)
+        .sender_ratchet_configuration(SenderRatchetConfiguration::new(
+            10,   // out_of_order_tolerance
+            2000, // maximum_forward_distance
+        ))
+        .use_ratchet_tree_extension(true)
+        .build();
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-groups"><a class="header" href="#creating-groups">Creating groups</a></h1>
+<p>Before a group can be created, a group configuration (<code>MlsGroupConfiguration</code>) needs to be defined. The default values of configuration parameters are picked for safety, however be sure to check all parameters carefully to ascertain if they match your implementation's requirements. See <a href="user_manual/group_config.html">Group configuration</a> for more details.</p>
+<p>In addition to the group configuration, the client should define all supported and requitred extension for the group. The negotatiation mechanism for extension in MLS consists in setting an intial list of extensions at group creation time and choosing key packages of subsequent new members accordingly.</p>
+<p>In practice, the supported and required extensions are set by adding them to the initial <code>KeyPackage</code> of the creator:</p>
+<pre><code class="language-rust no_run noplayground">    // Define extensions
+    let extensions = vec![Extension::LifeTime(LifetimeExtension::new(
+        60 * 60 * 24 * 90, // Maximum lifetime of 90 days, expressed in seconds
+    ))];
+
+    // Fetch the credential bundle from the key store
+    let credential_bundle = backend
+        .key_store()
+        .read(credential.signature_key())
+        .expect(&quot;An unexpected error occurred.&quot;);
+
+    // Create the key package bundle
+    let key_package_bundle =
+        KeyPackageBundle::new(ciphersuites, &amp;credential_bundle, backend, extensions)?;
+</code></pre>
+<p>Every group has a unique group ID that needs to be specified at the time of the group creation. The group ID cannot be changed after the group creation and therefore remains immutable throughout the group's lifetime. It should be chosen so that it doesn't collide with any other group IDs in the same system:</p>
+<pre><code class="language-rust no_run noplayground">    let group_id = GroupId::from_slice(b&quot;Test Group&quot;);
+</code></pre>
+<p>After that the group can be created:</p>
+<pre><code class="language-rust no_run noplayground">    let mut alice_group = MlsGroup::new(
+        backend,
+        &amp;mls_group_config,
+        group_id,
+        &amp;alice_key_package
+            .hash(backend)
+            .expect(&quot;Could not hash KeyPackage.&quot;),
+    )
+    .expect(&quot;An unexpected error occurred.&quot;);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="join-a-group-from-a-welcome-message"><a class="header" href="#join-a-group-from-a-welcome-message">Join a group from a Welcome message</a></h1>
+<p>To join a group from a <code>Welcome</code> message, a new <code>MlsGroup</code> can be instantiated directly from the <code>Welcome</code> message.
+If the group configuration does not use the ratchet tree extension, the ratchet tree needs to be provided as well.</p>
+<pre><code class="language-rust no_run noplayground">    let mut bob_group = MlsGroup::new_from_welcome(
+        backend,
+        &amp;mls_group_config,
+        welcome,
+        None, // We use the ratchet tree extension, so we don't provide a ratchet tree here
+    )
+    .expect(&quot;Error joining group from Welcome&quot;);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="adding-members-to-a-group"><a class="header" href="#adding-members-to-a-group">Adding members to a group</a></h1>
+<h2 id="immediate-operation"><a class="header" href="#immediate-operation">Immediate operation</a></h2>
+<p>Members can be added to the group atomically with the <code>.add_members()</code> function. The application needs to fetch the corresponding key packages from every new member from the Delivery Service first.</p>
+<pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome) = alice_group
+        .add_members(backend, &amp;[bob_key_package])
+        .expect(&quot;Could not add members.&quot;);
+</code></pre>
+<p>The function returns the tuple <code>(MlsMessageOut, Welcome)</code>. The <code>MlsMessageOut</code> contains a Commit message that needs to be fanned out to existing members of the group. The <code>Welcome</code> message needs to be sent to the newly added members.</p>
+<h2 id="proposal"><a class="header" href="#proposal">Proposal</a></h2>
+<p>Members can also be added as a proposal (without the corresponding Commit message) by using the <code>.propose_add_member()</code> function:</p>
+<pre><code class="language-rust no_run noplayground">    let mls_message_out = alice_group
+        .propose_add_member(backend, &amp;bob_key_package)
+        .expect(&quot;Could not create proposal to add Bob&quot;);
+</code></pre>
+<p>In this case the the function returns an <code>MlsMessageOut</code> that needs to be fanned out to existing group members.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="removing-members-from-a-group"><a class="header" href="#removing-members-from-a-group">Removing members from a group</a></h1>
+<h2 id="immediate-operation-1"><a class="header" href="#immediate-operation-1">Immediate operation</a></h2>
+<p>Members can be removed from the group atomically with the <code>.remove_members()</code> function.</p>
+<pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome_option) = charlie_group
+        .remove_members(backend, &amp;[1])
+        .expect(&quot;Could not remove Bob from group.&quot;);
+</code></pre>
+<p>The function returns the tuple <code>(MlsMessageOut, Option&lt;Welcome&gt;)</code>. The <code>MlsMessageOut</code> contains a Commit message that needs to be fanned out to existing members of the group.
+Despite the fact that members were only removed in this operation, the Commit message could potentially also cover Add Proposals that were previously received in the epoch. Therefore the function can also optionally return a <code>Welcome</code> message. The <code>Welcome</code> message needs to be sent to the newly added members.</p>
+<h2 id="proposal-1"><a class="header" href="#proposal-1">Proposal</a></h2>
+<p>Members can also be removed as a proposal (without the corresponding Commit message) by using the <code>.propose_remove_member()</code> function:</p>
+<pre><code class="language-rust no_run noplayground">    let mls_message_out = alice_group
+        .propose_remove_member(backend, 2)
+        .expect(&quot;Could not create proposal to remove Charlie.&quot;);
+</code></pre>
+<p>In this case the the function returns an <code>MlsMessageOut</code> that needs to be fanned out to existing group members.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="updating-own-key-package"><a class="header" href="#updating-own-key-package">Updating own key package</a></h1>
+<h2 id="immediate-operation-2"><a class="header" href="#immediate-operation-2">Immediate operation</a></h2>
+<p>Members can update their own leaf key package atomically with the <code>.self_update()</code> function.
+The application can optionally provide a <code>KeyPackage</code> manually. If not, a key package will be created on the fly with the same extensions as the current one, but with a fresh HPKE init key.</p>
+<pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome_option) = bob_group
+        .self_update(
+            backend,
+            None, // We don't provide a key package, it will be created on the fly instead
+        )
+        .expect(&quot;Could not update own key package.&quot;);
+</code></pre>
+<p>The function returns the tuple <code>(MlsMessageOut, Option&lt;Welcome&gt;)</code>. The <code>MlsMessageOut</code> contains a Commit message that needs to be fanned out to existing members of the group.
+Despite the fact that the member only updates its own key package in this operation, the Commit message could potentially also cover Add Proposals that were previously received in the epoch. Therefore the function can also optionally return a <code>Welcome</code> message. The <code>Welcome</code> message needs to be sent to the newly added members.</p>
+<h2 id="proposal-2"><a class="header" href="#proposal-2">Proposal</a></h2>
+<p>Members can also update their key package as a proposal (without the corresponding Commit message) by using the <code>.propose_self_update()</code> function. Just like with the <code>.self_update()</code> function, an optional key package can be provided:</p>
+<pre><code class="language-rust no_run noplayground">    let mls_message_out = alice_group
+        .propose_self_update(
+            backend,
+            None, // We don't provide a key package, it will be created on the fly instead
+        )
+        .expect(&quot;Could not create update proposal.&quot;);
+</code></pre>
+<p>In this case the the function returns an <code>MlsMessageOut</code> that needs to be fanned out to existing group members.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="leaving-a-group"><a class="header" href="#leaving-a-group">Leaving a group</a></h1>
+<p>Members can indicate to the other members of the group that they wish to leave the group by creating and sending a Remove Proposal for their own identifier. It is not possible for the member to create a Commit message that covers this proposal, as that would violate the Post-compromise Security guarantees of MLS because the member would know the epoch secrets of the next epoch.</p>
+<p>After successfully sending the proposal to the DS for fanout, it is safe for the member to tear down the local group state and ignore all subsequent messages for that group.</p>
+<p>For details on how to create Remove Proposals, see <a href="user_manual/remove_members.html">Removing members from a group</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-application-messages"><a class="header" href="#creating-application-messages">Creating application messages</a></h1>
+<p>Application messages are created from byte slices with the <code>.create_message()</code> function:</p>
+<pre><code class="language-rust no_run noplayground">    let message_alice = b&quot;Hi, I'm Alice!&quot;;
+    let mls_message_out = alice_group
+        .create_message(backend, message_alice)
+        .expect(&quot;Error creating application message.&quot;);
+</code></pre>
+<p>Note that the theoretical maximum length of application messages is 2^32 bytes, however in practice messages should be much shorter unless the Delivery Service can cope with very long messages.</p>
+<p>The function returns an <code>MlsMessageOut</code> that needs to be sent to the Delivery Service for fanout to other members of the group. To guarantee the best possible Forward Secrecy, the key material used to encrypt messages is immediately discarded after encryption. This means that the message author cannot decrypt application messages. If access to the messages content is required after creating the message, a copy of the plaintext message should be kept by the application.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="committing-to-pending-proposals"><a class="header" href="#committing-to-pending-proposals">Committing to pending proposals</a></h1>
+<p>During an epoch, members can create proposals that are not immediately committed. These proposals are called &quot;pending proposals&quot;. They will automatically be covered by any operation that creates a Commit message (like <code>.add_members(),</code> <code>.remove_members()</code>, etc.).</p>
+<p>Some operations, (like creating application messages) are not allowed as long as pending proposals exist for the current epoch. In that case, the application needs to first commit to the pending proposals by creating a Commit message that covers these proposals. This can be done with the <code>commit_to_pending_proposals()</code> function:</p>
+<pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome_option) = alice_group
+        .commit_to_pending_proposals(backend)
+        .expect(&quot;Could not commit to pending proposals.&quot;);
+</code></pre>
+<p>The function returns the tuple <code>(MlsMessageOut, Option&lt;Welcome&gt;)</code>. The <code>MlsMessageOut</code> contains a Commit message that needs to be fanned out to existing members of the group.
+In case the Commit message also covers Add Proposals that were previously received in the epoch, a <code>Welcome</code> message is required to invite the new members. Therefore the function can also optionally return a <code>Welcome</code> message. The <code>Welcome</code> message needs to be sent to the newly added members.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="processing-incoming-messages"><a class="header" href="#processing-incoming-messages">Processing incoming messages</a></h1>
+<p>Processing incoming messages happens in different phases:</p>
+<h2 id="deserializing-messages"><a class="header" href="#deserializing-messages">Deserializing messages</a></h2>
+<p>Incoming messages can be deserialized from byte slices into an <code>MlsMessageIn</code>:</p>
+<pre><code class="language-rust no_run noplayground">    let mls_message_in =
+        MlsMessageIn::try_from_bytes(&amp;bytes).expect(&quot;Could not deserialize message.&quot;);
+</code></pre>
+<p>If the message is malformed, the function will fail with an error.</p>
+<h2 id="parsing-messages"><a class="header" href="#parsing-messages">Parsing messages</a></h2>
+<p>In the next step, the incoming message needs to be parsed. If the message was encrypted, it will be decrypted automatically:</p>
+<pre><code class="language-rust no_run noplayground">    let unverified_message = bob_group
+        .parse_message(mls_message_in, backend)
+        .expect(&quot;Could not parse message.&quot;);
+</code></pre>
+<p>Parsing can fail, if e.g. dercrypting the message fails. The exact reason for failure is returned in the error.</p>
+<h2 id="processing-messages"><a class="header" href="#processing-messages">Processing messages</a></h2>
+<p>In the next step the unverified message needs to be processed. This step performs all remeining validity checks and also verifies the message's signature. Optionally, a signature key can be provided to verify the message's signature. This can be used when processing external messages. By default, the sender's credential is used to verify the signature.</p>
+<pre><code class="language-rust no_run noplayground">    let processed_message = bob_group
+        .process_unverified_message(
+            unverified_message,
+            None, // No external signature key
+            backend,
+        )
+        .expect(&quot;Could not process unverified message.&quot;);
+</code></pre>
+<h2 id="interpreting-the-processed-message"><a class="header" href="#interpreting-the-processed-message">Interpreting the processed message</a></h2>
+<p>In the last step, the message is ready for inspection. There are 3 different kinds of messages:</p>
+<h3 id="application-messages"><a class="header" href="#application-messages">Application messages</a></h3>
+<p>Application messages simply return the original byte slice:</p>
+<pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::ApplicationMessage(application_message) = processed_message {
+        // Check the message
+        assert_eq!(application_message.message(), b&quot;Hi, I'm Alice!&quot;);
+    }
+</code></pre>
+<h3 id="proposals"><a class="header" href="#proposals">Proposals</a></h3>
+<p>Standalone proposals are returned as a <code>QueuedProposal</code>, indicating the fact that they are pending proposals. The actual proposal can be inspected through the <code>.proposal()</code> function. After inspection, applications should store the pending proposal in the proposal store of the group:</p>
+<pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::ProposalMessage(staged_proposal) = charlie_processed_message {
+        // In the case we received an Add Proposal
+        if let Proposal::Add(add_proposal) = staged_proposal.proposal() {
+            // Check that Bob was added
+            assert_eq!(add_proposal.key_package().credential(), &amp;bob_credential);
+        } else {
+            panic!(&quot;Expected an AddProposal.&quot;);
+        }
+
+        // Check that Alice added Bob
+        // TODO #575: Replace this with the adequate API call
+        assert_eq!(staged_proposal.sender().to_leaf_index(), 0u32);
+        // Store proposal
+        charlie_group.store_pending_proposal(*staged_proposal);
+    }
+</code></pre>
+<h3 id="commit-messages"><a class="header" href="#commit-messages">Commit messages</a></h3>
+<p>Commit messages are returned as <code>StagedCommit</code> objects. The proposals they cover can be inspected through different functions, depending on the proposal type. For more details see the <code>StagedCommit</code> documentation. After the application has inspected the <code>StagedCommit</code> and approved all the proposals it covers, the <code>StagedCommit</code> can be merged in the current group state by calling the <code>.merge_staged_commit()</code> function.</p>
+<pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::StagedCommitMessage(staged_commit) = alice_processed_message {
+        // We expect a remove proposal
+        let remove = staged_commit
+            .remove_proposals()
+            .next()
+            .expect(&quot;Expected a proposal.&quot;);
+        // Check that Bob was removed
+        // TODO #575: Replace this with the adequate API call
+        assert_eq!(remove.remove_proposal().removed(), 1u32);
+        // Check that Charlie removed Bob
+        // TODO #575: Replace this with the adequate API call
+        assert_eq!(remove.sender().to_leaf_index(), 2u32);
+        // Merge staged commit
+        alice_group
+            .merge_staged_commit(*staged_commit)
+            .expect(&quot;Could not merge Commit.&quot;);
+    }
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="message-validation"><a class="header" href="#message-validation">Message Validation</a></h1>
 <h2 id="validation-steps"><a class="header" href="#validation-steps">Validation steps</a></h2>
 <ul>
 <li>Syntax validation: This should be mostly covered by the decoding</li>
@@ -181,217 +454,6 @@
 <tr><td><code>ValSem204</code></td><td>Public keys from Path must be verified and match the private keys from the direct path</td><td>✅</td><td>❌</td><td>TBD</td></tr>
 <tr><td><code>ValSem205</code></td><td>Confirmation tag must be successfully verified</td><td>✅</td><td>❌</td><td>TBD</td></tr>
 </tbody></table>
-<h2 id="api"><a class="header" href="#api">API</a></h2>
-<p><em><a href="https://docs.google.com/document/d/1mtA7nqfh1v2guvh-7fGYEYAWaFDdLvf4i9n602RL0iE/edit?usp=sharing">temporary discussion doc</a></em></p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl ManagedGroup {
-  fn parse_message(&amp;mut self, mls_message: MlsMessage) -&gt; Result&lt;UnverifiedMessage, ManagedGroupError&gt; {
-    /*
-     - epoch must be within bounds
-     - AAD can be extracted/evaluated
-     - decryption
-     - IFF content_type is a commit, confirmation_tag must be present
-    */
-  }
-
-  fn process_unverified_message(&amp;self, message: UnverifiedMessage, signature_key: Option&lt;SignatureKey&gt;) -&gt; Result&lt;ProcessedMessage, ManagedGroupError&gt; {
-    /*
-     - Signature verification, either with leaf key or optional parameter
-     - IF Commit:
-       - Extract all inline &amp; pending proposals
-     - Semantic validation of all proposals
-       - IF Add Proposal: Double join check
-       - IF Remove Proposal: Ghost removal check
-       - IF Update Proposal: Identity must be unchanged
-     - IF Commit:
-       - Commit must not cover inline self Remove proposal
-       - Path must be present, unless Commit only covers Add Proposals
-       - Path must be the right length
-       - Staging step: proposals must be applied to modify the provisional tree
-       - Path must be applied and decrypt correctly
-       - New public keys from Path must be verified and match the private keys from the direct path
-       - Confirmation tag must be successfully verified
-    */
-  }
-
-  fn store_pending_proposal(&amp;mut self, pending_proposal: PendingProposal) -&gt; () {
-  /*
-   - Store proposal in pending proposal list
-  */
-  }
-
-  fn merge_staged_commit(&amp;mut self, staged_commit: StagedCommit, psks: &amp;[Psks]) -&gt; Result&lt;(), ManagedGroupError&gt; {
-    /*
-     - Merge staged Commit values into internal group stage
-    */
-  }
-}
-
-enum MlsMessage {
-  Ciphertext(MlsCiphertext),
-  Plaintext(MlsPlaintext),
-}
-
-impl UnverifiedMessage {
-  fn aad(&amp;self) -&gt; &amp;[u8] {}
-  fn credential(&amp;self) -&gt; &amp;Credential {}
-}
-
-enum ProcessedMessage {
-  ApplicationMessage(Vec&lt;u8&gt;),
-  ProposalMessage(PendingProposal),
-  StagedCommitMessage(StagedCommit),
-}
-
-enum PendingProposal {
-  Add(PendingAddProposal),
-  Remove(PendingRemoveProposal),
-  Update(PendingRemoveProposal),
-  Psk(PendingPskProposal),
-}
-
-impl StagedCommit {
-  fn adds(&amp;self) -&gt; &amp;[PendingAddProposal] {}
-  fn removes(&amp;self) -&gt; &amp;[PendingRemoveProposal] {}
-  fn updates(&amp;self) -&gt; &amp;[PendingUpdate] {}
-  fn psks(&amp;self) -&gt; &amp;[PendingPskProposal] {}
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="example-api-usage"><a class="header" href="#example-api-usage">Example API usage</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>// Parse either MlsPlaintext or MlsCiphertext
-let unverified_message = group.pares_message(mls_message).expect(&quot;E1&quot;);
-
-// Inspect AAD (optional)
-if unverified_message.aad() == &amp;[1, 2, 3] {}
-
-// Inspect credential and fetch signature key from AS (optional)
-let signature_key = AuthenticationService::get_key(unverified_message.credential());
-
-let processed_message = group.process_unverified_message(unverified_message, Some(signature_key)).expect(&quot;E2&quot;);
-
-match processed_message {
-  ApplicationMessage(bytes) =&gt; {
-    // Do something with application message.
-    // No further interaction with the group is needed.
-  },
-  ProposalMessage(pending_proposal) =&gt; {
-    // We can optionally inspect the proposal before we store it in the group:
-    match &amp;pending_proposal {
-      Add(pending_add_proposal) =&gt; {
-        // Do a policy check on that proposal
-      },
-      // Other type of propsals
-      _ =&gt; {},
-    }
-    // After the optional inspection we store the pending proposal in the group
-    group.store_pending_proposal(pending_proposal);
-  }
-  StagedCommitMessage(staged_commit) =&gt; {
-    // We can optionally inspect all proposals covered by the Commit message before we merge it into the group:
-    for add_proposal in &amp;staged_commit.adds() {
-      // Inspect add proposals here
-    }
-    // Inspect PSKs and get them from a store:
-    let psks = staged_commit.psks.iter().map(|p| PskStore::fetch_psk(p)).collect();
-    // Merge the staged commit into the group
-    group.merge_staged_commit(staged_commit, psks).expect(&quot;E3&quot;);
-  }
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h1 id="legacy-stuff"><a class="header" href="#legacy-stuff">Legacy stuff</a></h1>
-<h3 id="validation-function"><a class="header" href="#validation-function">Validation function</a></h3>
-<p>The validation function has access to the inner state of a <code>ManagedGroup</code> and takes any inbound message from the DS as input. The messages are processed as follows:</p>
-<h4 id="application-messages"><a class="header" href="#application-messages">Application messages</a></h4>
-<p>The message is checked and marked as either valid or invalid.</p>
-<h4 id="proposals"><a class="header" href="#proposals">Proposals</a></h4>
-<p>The message is checked and marked as either valid or invalid. Proposals are stored inside a <code>ManagedGroup</code> and only evaluated when a Commit message is processed.</p>
-<h4 id="commits"><a class="header" href="#commits">Commits</a></h4>
-<p>The message is checked and marked as either valid, invalid or pending validation. If the Commit message covers proposals that require validation by the AS, a <code>PendingValidationMessage</code> type message is returned. The list of operations in that message covers all relevant proposals that were previously received in the current epoch.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>impl ManagedGroup {
-    ...
-    fn validate(&amp;mut self, mls_message: MlsMessage) -&gt; EvaluatedMessage { ... }
-    ...
-}
-
-enum MlsMessage {
-    Plaintext(MlsPlaintext),
-    Ciphertext(MlsCiphertext),
-}
-
-enum EvaluatedMessage {
-    ValidMessage(ValidPlaintextMessage),
-    PendingValidation(PendingValidationMessage),
-    InvalidMessage(InvalidMessageDetails),
-}
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="valid-messages"><a class="header" href="#valid-messages">Valid messages</a></h3>
-<p>Valid messages are either automatically valid if they passed all checks, or can be converted from <code>PendingValidationMessage</code> by manual validation.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct ValidPlaintextMessage(MlsPlaintext)
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="messages-pending-validation"><a class="header" href="#messages-pending-validation">Messages pending validation</a></h3>
-<p>Messages are marked as pending validation if input from the AS is required.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct PendingValidationMessage {
-    message: MlsPlaintext,
-    operations: Vec&lt;OperationType&gt;,
-}
-
-impl PendingValidationMessage {
-    fn validate(&amp;self) -&gt; ValidPlaintextMessage { ... }
-}
-
-enum OperationType {
-    Add(AddOperation),
-    Remove(RemoveOperation),
-    Join(JoinOperation),
-    Leave(LeaveOperation),
-    Psk(PskOperation),
-}
-
-struct AddOperation { ... }
-...
-<span class="boring">}
-</span></code></pre></pre>
-<h3 id="invalid-messages"><a class="header" href="#invalid-messages">Invalid messages</a></h3>
-<p>Messages that didn't pass the syntactic &amp; semantic checks are marked as invalid with a reason for their invalidity.</p>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>struct InvalidMessageDetails {
-    sender: Option&lt;Sender&gt;,
-    reason: InvalidMessageReason,
-}
-
-enum InvalidMessageReason {
-    InvalidGroup,
-    InvalidGeneration,
-    InvalidCiphertext,
-    InvalidSignature,
-    InvalidMembershipTag,
-    DoubleJoin,
-    GhostRemoval,
-    InvalidUpdate,
-    ...
-}
-<span class="boring">}
-</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tree-rewrite-project"><a class="header" href="#tree-rewrite-project">Tree Rewrite Project</a></h1>
 <p><img src="https://img.shields.io/badge/status-wip-orange.svg?style=for-the-badge" alt="" /></p>
 <h2 id="treesync"><a class="header" href="#treesync">TreeSync</a></h2>
@@ -878,6 +940,22 @@ commit, as well as any potential key material that was introduced to the tree as
 part of an update that someone else committed for them. The key material in the
 original ratchet tree is dropped as soon as the <code>StagedCommit</code> (and thus the
 diff) is merged into the tree.</p>
+<h3 id="sending-application-messages"><a class="header" href="#sending-application-messages">Sending application messages</a></h3>
+<p>When an application message is created, the corresponding encryption key is derived from the <code>SecretTree</code> and immediately discarded after encrypting the message to guarantee the best possible Forward Secrecy. This means that the message author cannot decrypt application messages. If access to the messages content is required after creating the message, a copy of the plaintext message should be kept by the application.</p>
+<h3 id="receiving-encrypted-messages"><a class="header" href="#receiving-encrypted-messages">Receiving encrypted messages</a></h3>
+<p>When an encrypted message is received, the corresponding decryption key is derived from the <code>SecretTree</code>. By default, the key material is discarded immediately after decryption for the best possible Forward Secrecy. In some cases, the Delivery Service cannot guarantee reliable operation and applications need to be more tolerant to accomodate this – at the expense of Forward Secrecy.</p>
+<p>OpenMLS can address 3 scenarios:</p>
+<ul>
+<li>
+<p>The Delivery Service cannot guarantee that application messages from one epoch are sent before the beginning of the next epoch. To address this, applications can configure their groups to keep the necessary key material around for past epochs by setting the <code>max_past_epochs</code> field in the <code>MlsGroupConfig</code> to the desired number of epochs.</p>
+</li>
+<li>
+<p>The Delivery Service cannot guarantee that application messages will arrive in order within the same epoch. To address this, applications can configure the <code>out_of_order_tolerance</code> parameter of the <code>SenderRatchetConfiguration</code>. The configuration can be set as the <code>sender_ratchet_configuration</code> parameter of the <code>MlsGroupConfig</code>.</p>
+</li>
+<li>
+<p>The Delivery Service cannot guarantee that application messages won't be dropped within the same epoch. To address this, applications can configure the <code>maximum_forward_distance</code> parameter of the <code>SenderRatchetConfiguration</code>. The configuration can be set as the <code>sender_ratchet_configuration</code> parameter of the <code>MlsGroupConfig</code>.</p>
+</li>
+</ul>
 
                     </main>
 
