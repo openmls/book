@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="../user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="../user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="../user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="../user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="../user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="../user_manual/remove_members.html"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="../user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="../user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="../user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="../user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="../user_manual/processing.html" class="active"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li></ol></li><li class="chapter-item expanded "><a href="../message_validation.html"><strong aria-hidden="true">2.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="../tree_rewrite.html"><strong aria-hidden="true">3.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="../type_enfored_verification.html"><strong aria-hidden="true">4.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="../performance.html"><strong aria-hidden="true">5.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../forward_secrecy.html"><strong aria-hidden="true">6.</strong> Forward Secrecy</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="../user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="../user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="../user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="../user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="../user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="../user_manual/remove_members.html"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="../user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="../user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="../user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="../user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="../user_manual/processing.html" class="active"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li><li class="chapter-item expanded "><a href="../user_manual/persistence.html"><strong aria-hidden="true">1.13.</strong> Persistenc of group state</a></li></ol></li><li class="chapter-item expanded "><a href="../traits/index.html"><strong aria-hidden="true">2.</strong> Traits &amp; External Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../traits/traits.html"><strong aria-hidden="true">2.1.</strong> Traits</a></li><li class="chapter-item expanded "><a href="../traits/types.html"><strong aria-hidden="true">2.2.</strong> Types</a></li></ol></li><li class="chapter-item expanded "><a href="../message_validation.html"><strong aria-hidden="true">3.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="../performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../forward_secrecy.html"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li><li class="chapter-item expanded "><a href="../release_management.html"><strong aria-hidden="true">6.</strong> Release management</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -150,7 +150,7 @@
 </code></pre>
 <p>Parsing can fail, if e.g. dercrypting the message fails. The exact reason for failure is returned in the error.</p>
 <h2 id="processing-messages"><a class="header" href="#processing-messages">Processing messages</a></h2>
-<p>In the next step the unverified message needs to be processed. This step performs all remeining validity checks and also verifies the message's signature. Optionally, a signature key can be provided to verify the message's signature. This can be used when processing external messages. By default, the sender's credential is used to verify the signature.</p>
+<p>In the next step the unverified message needs to be processed. This step performs all remaining validity checks and also verifies the message's signature. Optionally, a signature key can be provided to verify the message's signature. This can be used when processing external messages. By default, the sender's credential is used to verify the signature.</p>
 <pre><code class="language-rust no_run noplayground">    let processed_message = bob_group
         .process_unverified_message(
             unverified_message,
@@ -165,7 +165,7 @@
 <p>Application messages simply return the original byte slice:</p>
 <pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::ApplicationMessage(application_message) = processed_message {
         // Check the message
-        assert_eq!(application_message.message(), b&quot;Hi, I'm Alice!&quot;);
+        assert_eq!(application_message.into_bytes(), b&quot;Hi, I'm Alice!&quot;);
     }
 </code></pre>
 <h3 id="proposals"><a class="header" href="#proposals">Proposals</a></h3>
@@ -180,8 +180,12 @@
         }
 
         // Check that Alice added Bob
-        // TODO #575: Replace this with the adequate API call
-        assert_eq!(staged_proposal.sender().to_leaf_index(), 0u32);
+        assert!(matches!(
+            staged_proposal.sender(),
+            Sender::Member(member) if member == alice_group
+            .key_package_ref()
+            .expect(&quot;An unexpected error occurred.&quot;)
+        ));
         // Store proposal
         charlie_group.store_pending_proposal(*staged_proposal);
     }
@@ -195,15 +199,60 @@
             .next()
             .expect(&quot;Expected a proposal.&quot;);
         // Check that Bob was removed
-        // TODO #575: Replace this with the adequate API call
-        assert_eq!(remove.remove_proposal().removed(), 1u32);
+        assert_eq!(
+            remove.remove_proposal().removed(),
+            bob_group
+                .key_package_ref()
+                .expect(&quot;An unexpected error occurred.&quot;)
+        );
         // Check that Charlie removed Bob
-        // TODO #575: Replace this with the adequate API call
-        assert_eq!(remove.sender().to_leaf_index(), 2u32);
+        assert!(matches!(
+            remove.sender(),
+            Sender::Member(member) if member == &amp;charlies_old_kpr
+        ));
         // Merge staged commit
         alice_group
             .merge_staged_commit(*staged_commit)
             .expect(&quot;Could not merge Commit.&quot;);
+    }
+</code></pre>
+<h3 id="interpreting-remove-operations"><a class="header" href="#interpreting-remove-operations">Interpreting remove operations</a></h3>
+<p>Remove operations can have different meanings, such as:</p>
+<ul>
+<li>We left the group (by our own wish)</li>
+<li>We were removed from the group (by another member or a pre-configured sender)</li>
+<li>We removed another member from the group</li>
+<li>Another member left the group (by its own wish)</li>
+<li>Another member was removed from the group (by a member or a pre-configured sender, but not by us)</li>
+</ul>
+<p>Since all remove operations only appear as a <code>QueuedRemoveProposal</code>, the <code>RemoveOperation</code> enum can be constructed from the remove proposal and the current group state to refelect the different scenarios listed above.</p>
+<pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::StagedCommitMessage(staged_commit) = bob_processed_message {
+        let remove_proposal = staged_commit
+            .remove_proposals()
+            .next()
+            .expect(&quot;An unexpected error occurred.&quot;);
+
+        // We construct a RemoveOperation enum to help us interpret the remove operation
+        let remove_operation = RemoveOperation::new(remove_proposal, &amp;bob_group)
+            .expect(&quot;An unexpected Error occurred.&quot;);
+
+        match remove_operation {
+            RemoveOperation::WeLeft =&gt; unreachable!(),
+            // We expect this variant, since Bob was removed by Charlie
+            RemoveOperation::WeWereRemovedBy(member) =&gt; {
+                assert!(matches!(member, Sender::Member(member) if member == charlies_old_kpr));
+            }
+            RemoveOperation::TheyLeft(_) =&gt; unreachable!(),
+            RemoveOperation::TheyWereRemovedBy(_) =&gt; unreachable!(),
+            RemoveOperation::WeRemovedThem(_) =&gt; unreachable!(),
+        }
+
+        // Merge staged Commit
+        bob_group
+            .merge_staged_commit(*staged_commit)
+            .expect(&quot;Could not merge Commit.&quot;);
+    } else {
+        unreachable!(&quot;Expected a StagedCommit.&quot;);
     }
 </code></pre>
 
@@ -214,7 +263,7 @@
                             <a rel="prev" href="../user_manual/commit_to_proposals.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../message_validation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../user_manual/persistence.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -226,7 +275,7 @@
                     <a rel="prev" href="../user_manual/commit_to_proposals.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../message_validation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../user_manual/persistence.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

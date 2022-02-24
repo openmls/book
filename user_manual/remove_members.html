@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="../user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="../user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="../user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="../user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="../user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="../user_manual/remove_members.html" class="active"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="../user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="../user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="../user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="../user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="../user_manual/processing.html"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li></ol></li><li class="chapter-item expanded "><a href="../message_validation.html"><strong aria-hidden="true">2.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="../tree_rewrite.html"><strong aria-hidden="true">3.</strong> Tree Rewrite Project</a></li><li class="chapter-item expanded "><a href="../type_enfored_verification.html"><strong aria-hidden="true">4.</strong> Type-Enforced Verification</a></li><li class="chapter-item expanded "><a href="../performance.html"><strong aria-hidden="true">5.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../forward_secrecy.html"><strong aria-hidden="true">6.</strong> Forward Secrecy</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../user_manual/index.html"><strong aria-hidden="true">1.</strong> User manual</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../user_manual/identity.html"><strong aria-hidden="true">1.1.</strong> Creating identity keys</a></li><li class="chapter-item expanded "><a href="../user_manual/create_key_package.html"><strong aria-hidden="true">1.2.</strong> Creating key packges</a></li><li class="chapter-item expanded "><a href="../user_manual/group_config.html"><strong aria-hidden="true">1.3.</strong> Group configuration</a></li><li class="chapter-item expanded "><a href="../user_manual/create_group.html"><strong aria-hidden="true">1.4.</strong> Creating groups</a></li><li class="chapter-item expanded "><a href="../user_manual/join_from_welcome.html"><strong aria-hidden="true">1.5.</strong> Join a group from a Welcome message</a></li><li class="chapter-item expanded "><a href="../user_manual/add_members.html"><strong aria-hidden="true">1.6.</strong> Adding members to a group</a></li><li class="chapter-item expanded "><a href="../user_manual/remove_members.html" class="active"><strong aria-hidden="true">1.7.</strong> Removing members from a group</a></li><li class="chapter-item expanded "><a href="../user_manual/updates.html"><strong aria-hidden="true">1.8.</strong> Updating own key package</a></li><li class="chapter-item expanded "><a href="../user_manual/leaving.html"><strong aria-hidden="true">1.9.</strong> Leaving a group</a></li><li class="chapter-item expanded "><a href="../user_manual/application_messages.html"><strong aria-hidden="true">1.10.</strong> Creating application messages</a></li><li class="chapter-item expanded "><a href="../user_manual/commit_to_proposals.html"><strong aria-hidden="true">1.11.</strong> Committing to pending proposals</a></li><li class="chapter-item expanded "><a href="../user_manual/processing.html"><strong aria-hidden="true">1.12.</strong> Processing incoming messages</a></li><li class="chapter-item expanded "><a href="../user_manual/persistence.html"><strong aria-hidden="true">1.13.</strong> Persistenc of group state</a></li></ol></li><li class="chapter-item expanded "><a href="../traits/index.html"><strong aria-hidden="true">2.</strong> Traits &amp; External Types</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../traits/traits.html"><strong aria-hidden="true">2.1.</strong> Traits</a></li><li class="chapter-item expanded "><a href="../traits/types.html"><strong aria-hidden="true">2.2.</strong> Types</a></li></ol></li><li class="chapter-item expanded "><a href="../message_validation.html"><strong aria-hidden="true">3.</strong> Message Validation</a></li><li class="chapter-item expanded "><a href="../performance.html"><strong aria-hidden="true">4.</strong> Performance</a></li><li class="chapter-item expanded "><a href="../forward_secrecy.html"><strong aria-hidden="true">5.</strong> Forward Secrecy</a></li><li class="chapter-item expanded "><a href="../release_management.html"><strong aria-hidden="true">6.</strong> Release management</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -136,9 +136,9 @@
                     <main>
                         <h1 id="removing-members-from-a-group"><a class="header" href="#removing-members-from-a-group">Removing members from a group</a></h1>
 <h2 id="immediate-operation"><a class="header" href="#immediate-operation">Immediate operation</a></h2>
-<p>Members can be removed from the group atomically with the <code>.remove_members()</code> function.</p>
+<p>Members can be removed from the group atomically with the <code>.remove_members()</code> function, which takes the <code>KeyPackageRef</code> of group member as input. References to the <code>KeyPackage</code>s of group members can be obtained using the <code>.members()</code> function, from which one can in turn compute the <code>KeyPackageRef</code> using their <code>.hash_ref()</code> function.</p>
 <pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome_option) = charlie_group
-        .remove_members(backend, &amp;[1])
+        .remove_members(backend, &amp;[bob_kp_ref])
         .expect(&quot;Could not remove Bob from group.&quot;);
 </code></pre>
 <p>The function returns the tuple <code>(MlsMessageOut, Option&lt;Welcome&gt;)</code>. The <code>MlsMessageOut</code> contains a Commit message that needs to be fanned out to existing members of the group.
@@ -146,10 +146,56 @@ Despite the fact that members were only removed in this operation, the Commit me
 <h2 id="proposal"><a class="header" href="#proposal">Proposal</a></h2>
 <p>Members can also be removed as a proposal (without the corresponding Commit message) by using the <code>.propose_remove_member()</code> function:</p>
 <pre><code class="language-rust no_run noplayground">    let mls_message_out = alice_group
-        .propose_remove_member(backend, 2)
+        .propose_remove_member(
+            backend,
+            charlie_group
+                .key_package_ref()
+                .expect(&quot;An unexpected error occurred.&quot;),
+        )
         .expect(&quot;Could not create proposal to remove Charlie.&quot;);
 </code></pre>
 <p>In this case the the function returns an <code>MlsMessageOut</code> that needs to be fanned out to existing group members.</p>
+<h2 id="getting-removed-from-a-group"><a class="header" href="#getting-removed-from-a-group">Getting removed from a group</a></h2>
+<p>A member is removed from a group if another member commits to a remove proposal targeting the member's leaf. Once the to-be-removed member merges that commit via <code>merge_staged_commit()</code>, all other proposals in that commit will still be applied but the group will be marked as inactive afterward. The group remains usable, e.g. to examine the membership list after the final commit was processed, but it won't be possible to create or process new messages.</p>
+<pre><code class="language-rust no_run noplayground">    if let ProcessedMessage::StagedCommitMessage(staged_commit) = bob_processed_message {
+        let remove_proposal = staged_commit
+            .remove_proposals()
+            .next()
+            .expect(&quot;An unexpected error occurred.&quot;);
+
+        // We construct a RemoveOperation enum to help us interpret the remove operation
+        let remove_operation = RemoveOperation::new(remove_proposal, &amp;bob_group)
+            .expect(&quot;An unexpected Error occurred.&quot;);
+
+        match remove_operation {
+            RemoveOperation::WeLeft =&gt; unreachable!(),
+            // We expect this variant, since Bob was removed by Charlie
+            RemoveOperation::WeWereRemovedBy(member) =&gt; {
+                assert!(matches!(member, Sender::Member(member) if member == charlies_old_kpr));
+            }
+            RemoveOperation::TheyLeft(_) =&gt; unreachable!(),
+            RemoveOperation::TheyWereRemovedBy(_) =&gt; unreachable!(),
+            RemoveOperation::WeRemovedThem(_) =&gt; unreachable!(),
+        }
+
+        // Merge staged Commit
+        bob_group
+            .merge_staged_commit(*staged_commit)
+            .expect(&quot;Could not merge Commit.&quot;);
+    } else {
+        unreachable!(&quot;Expected a StagedCommit.&quot;);
+    }
+
+    // Check we didn't receive a Welcome message
+    assert!(welcome_option.is_none());
+
+    // Check that Bob's group is no longer active
+    assert!(!bob_group.is_active());
+    let members = bob_group.members();
+    assert_eq!(members.len(), 2);
+    assert_eq!(members[0].credential().identity(), b&quot;Alice&quot;);
+    assert_eq!(members[1].credential().identity(), b&quot;Charlie&quot;);
+</code></pre>
 
                     </main>
 
