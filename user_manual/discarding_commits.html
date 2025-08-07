@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Updating own key package - OpenMLS Book</title>
+        <title>Discarding commits - OpenMLS Book</title>
 
 
         <!-- Custom HTML head -->
@@ -175,54 +175,46 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="updating-own-leaf-node"><a class="header" href="#updating-own-leaf-node">Updating own leaf node</a></h1>
-<h2 id="immediate-operation"><a class="header" href="#immediate-operation">Immediate operation</a></h2>
-<p>Members can update their own leaf node atomically with the <code>.self_update()</code> function.
-By default, only the HPKE encryption key is updated. The application can however also provide more parameters like a new credential, capabilities and extensions using the <code>LeafNodeParameters</code> struct.</p>
-<pre><code class="language-rust no_run noplayground">    let (mls_message_out, welcome_option, _group_info) = bob_group
-        .self_update(provider, &amp;bob_signature_keys, LeafNodeParameters::default())
-        .expect("Could not update own key package.")
-        .into_contents();</code></pre>
-<p>The function returns a <code>CommitMessageBundle</code>, which consists of the Commit message that needs to be fanned out to existing group members.
-Even though the member updates its own leaf node only in this operation, the Commit message could potentially also cover Add Proposals that were previously received in the epoch. Therefore the <code>CommitMessagBundle</code> can also contain a <code>Welcome</code> message. The <code>Welcome</code> message must be sent to the newly added members.</p>
-<p>Members can use the <code>.self_update_with_new_signer()</code> function to also update the <code>Signer</code> used to sign future MLS messages.</p>
-<pre><code class="language-rust no_run noplayground">
-    let new_signer_bundle = NewSignerBundle {
-        signer: &amp;alice_new_signature_keys,
-        credential_with_key: alice_new_credential,
-    };
+                        <h1 id="discarding-commits"><a class="header" href="#discarding-commits">Discarding commits</a></h1>
+<p>The delivery service may reject a commit sent by a client. In this case, the application needs to ensure that the local state remains the same as it was before the commit was staged.</p>
+<h2 id="cleaning-up-local-state-after-discarded-commits"><a class="header" href="#cleaning-up-local-state-after-discarded-commits">Cleaning up local state after discarded commits</a></h2>
+<p>Generally, if a commit is discarded (e.g. due to being rejected by the Delivery Service), it can be cleaned up by the application in the following way:</p>
+<pre><code class="language-rust no_run noplayground">    // clear pending commit and reset state
+    alice_group
+        .clear_pending_commit(alice_provider.storage())
+        .unwrap();</code></pre>
+<p>In general, the application only needs to complete the cleanup above in order to fully restore the local state to the way it was before the commit was staged.</p>
+<p>In several other cases, additional cleanup may need to be done.</p>
+<h3 id="externaljoin"><a class="header" href="#externaljoin">ExternalJoin</a></h3>
+<p>If a staged commit containing an external join proposal must be discarded, the entire <code>MlsGroup</code> instance should be discarded by the application.</p>
+<pre><code class="language-rust no_run noplayground">    // delete the `MlsGroup`
+    bob_group
+        .delete(bob_provider.storage())
+        .expect("Could not delete the group");</code></pre>
+<h3 id="presharedkey"><a class="header" href="#presharedkey">PreSharedKey</a></h3>
+<p>In addition to clearing the staged commit, the application may also clear the pre-shared key from storage.</p>
+<pre><code class="language-rust no_run noplayground">    // clear the psk that was stored earlier, if necessary
+    alice_provider
+        .storage()
+        .delete_psk(&amp;psk)
+        .expect("Could not delete stored psk");
 
-    let message_bundle = alice_group
-        .self_update_with_new_signer(
-            provider,
-            &amp;alice_old_signature_keys,
-            new_signer_bundle,
-            LeafNodeParameters::default(),
-        )
-        .unwrap();
-
-    let (mls_message_out, welcome, group_info) = message_bundle.into_contents();</code></pre>
-<p>When constructing the <code>NewSignerBundle</code>, the <code>Signer</code> must match the public key and credential in the <code>CredentialWithKey</code>. When using <code>self_update_with_new_signer</code>, <code>LeafNodeParameters</code> may not contain a <code>CredentialWithKey</code>.</p>
-<h2 id="proposal"><a class="header" href="#proposal">Proposal</a></h2>
-<p>Members can also update their leaf node as a proposal (without the corresponding Commit message) by using the <code>.propose_self_update()</code> function. Just like with the <code>.self_update()</code> function, optional parameters can be set through <code>LeafNodeParameters</code>:</p>
-<pre><code class="language-rust no_run noplayground">    let (mls_message_out, _proposal_ref) = alice_group
-        .propose_self_update(
-            provider,
-            &amp;alice_signature_keys,
-            LeafNodeParameters::default(),
-        )
-        .expect("Could not create update proposal.");</code></pre>
-<p>In this case, the function returns an <code>MlsMessageOut</code> that needs to be fanned out to existing group members.</p>
+    // clear pending commit and reset state
+    alice_group
+        .clear_pending_commit(alice_provider.storage())
+        .expect("Could not clear pending commit");</code></pre>
+<h3 id="self-update"><a class="header" href="#self-update">Self Update</a></h3>
+<p>The storage provider may also be used by the application to store signature keypairs. For self updates that update a signature keypair for the client, if the application has stored a new keypair in the storage provider at this point, it can be deleted from the storage provider here.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../user_manual/remove_members.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../user_manual/persistence.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../user_manual/aad.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../user_manual/credential_validation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -232,11 +224,11 @@ Even though the member updates its own leaf node only in this operation, the Com
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../user_manual/remove_members.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../user_manual/persistence.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../user_manual/aad.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../user_manual/credential_validation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
