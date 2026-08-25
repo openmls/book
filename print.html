@@ -16,8 +16,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-2459343d.css">
-        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6a557a95.js";
+            window.path_to_searchindex_js = "searchindex-e9dadfee.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e31a8293.js"></script>
+        <script src="toc-d3aff166.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,7 +183,7 @@
 <a href="https://codecov.io/gh/openmls/openmls"><img src="https://img.shields.io/codecov/c/github/openmls/openmls/main?logo=codecov&amp;style=for-the-badge" alt="codecov"></a></p>
 <p><a href="https://docs.rs/crate/openmls/latest"><img src="https://img.shields.io/badge/docs-release-blue.svg?style=for-the-badge" alt="Docs"></a>
 <a href="https://book.openmls.tech"><img src="https://img.shields.io/badge/book-release-blue.svg?style=for-the-badge" alt="Book"></a>
-<img src="https://img.shields.io/badge/rustc-1.56+-blue.svg?style=for-the-badge&amp;logo=rust" alt="Rust Version"></p>
+<label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="https://img.shields.io/badge/rustc-1.91+-blue.svg?style=for-the-badge&amp;logo=rust" alt="Rust Version"><span class="img-wrapper"><img src="https://img.shields.io/badge/rustc-1.91+-blue.svg?style=for-the-badge&amp;logo=rust" alt="Rust Version"></span></label></p>
 <p><em>OpenMLS</em> is a Rust implementation of the Messaging Layer Security (MLS) protocol, as specified in <a href="https://datatracker.ietf.org/doc/html/rfc9420">RFC 9420</a>.
 OpenMLS provides a high-level API to create and manage MLS groups. It supports basic ciphersuites and an interchangeable cryptographic provider, key store, and random number generator.</p>
 <p>This book provides guidance on using OpenMLS and its <code>MlsGroup</code> API to perform basic group operations, illustrated with examples.</p>
@@ -198,19 +198,18 @@ OpenMLS provides a high-level API to create and manage MLS groups. It supports b
 <p>OpenMLS is built and tested on the Github CI for the following rust targets.</p>
 <ul>
 <li>x86_64-unknown-linux-gnu</li>
-<li>i686-unknown-linux-gnu</li>
 <li>x86_64-pc-windows-msvc</li>
-<li>i686-pc-windows-msvc</li>
-<li>x86_64-apple-darwin</li>
+<li>aarch64-apple-darwin</li>
+<li>aarch64-unknown-linux-gnu</li>
 </ul>
 <h3 id="unsupported-but-built-on-ci"><a class="header" href="#unsupported-but-built-on-ci">Unsupported, but built on CI</a></h3>
 <p>The Github CI also builds (but doesn’t test) the following rust targets.</p>
 <ul>
-<li>aarch64-apple-darwin</li>
-<li>aarch64-unknown-linux-gnu</li>
+<li>i686-unknown-linux-gnu</li>
+<li>i686-pc-windows-msvc</li>
+<li>x86_64-apple-darwin</li>
 <li>aarch64-linux-android</li>
 <li>aarch64-apple-ios</li>
-<li>aarch64-apple-ios-sim</li>
 <li>wasm32-unknown-unknown</li>
 <li>armv7-linux-androideabi</li>
 <li>x86_64-linux-android</li>
@@ -226,7 +225,7 @@ details.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <p>OpenMLS provides the following features</p>
 <ul>
-<li><strong>extensions-draft-08</strong>: enable features defined in <a href="https://messaginglayersecurity.rocks/mls-extensions/draft-ietf-mls-extensions.html">MLS extensions draft-08</a></li>
+<li><strong>extensions-draft</strong>: enable features defined in <a href="https://messaginglayersecurity.rocks/mls-extensions/draft-ietf-mls-extensions.html">MLS extensions draft</a></li>
 <li><strong>fork-resolution</strong>: helper functionality for <a href="https://book.openmls.tech/user_manual/fork-resolution.html">resolving forks</a>.</li>
 <li><strong>js</strong>: enable compilation to wasm</li>
 </ul>
@@ -245,7 +244,7 @@ details.</p>
 <h2 id="working-on-openmls"><a class="header" href="#working-on-openmls">Working on OpenMLS</a></h2>
 <p>For more details when working on OpenMLS itself please see the <a href="https://github.com/openmls/openmls/blob/main/Developer.md">Developer.md</a>.</p>
 <h2 id="maintenance--support"><a class="header" href="#maintenance--support">Maintenance &amp; Support</a></h2>
-<p>OpenMLS is maintained and developed by <a href="https://phnx.im">Phoenix R&amp;D</a> and <a href="https://cryspen.com">Cryspen</a>.</p>
+<p>OpenMLS is maintained and developed by <a href="https://phnx.im">Phoenix R&amp;D</a> and <a href="https://celabs.eu">CE Labs</a>.</p>
 <h2 id="acknowledgements"><a class="header" href="#acknowledgements">Acknowledgements</a></h2>
 <p><a href="https://zulip.com/">Zulip</a> graciously provides the OpenMLS community with a “Zulip Cloud Standard” tier <a href="https://openmls.zulipchat.com">Zulip instance</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -286,32 +285,80 @@ OpenMLS provides a <a href="https://github.com/openmls/openmls/tree/main/basic_c
     signature_keys.store(provider.storage()).unwrap();</code></pre>
 <p>All functions and structs related to credentials can be found in the <a href="https://docs.rs/openmls/latest/openmls/credentials/index.html"><code>credentials</code></a> module.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="key-packages"><a class="header" href="#key-packages">Key packages</a></h1>
-<p>To enable the asynchronous establishment of groups through pre-publishing key material, as well as to represent clients in the group, MLS relies on key packages. Key packages hold several pieces of information:</p>
+<h1 id="key-packages"><a class="header" href="#key-packages">Key Packages</a></h1>
+<p>The MLS protocol is designed to be asynchronous: It allows members to be added to groups without said members being online.</p>
+<p>The general flow is as follows:</p>
+<ol>
+<li><strong>Client A</strong> generates key packages and registers them with the Delivery Service</li>
+<li><strong>Client B</strong> decides to add <strong>Client A</strong> to a group, so it contacts the Delivery Service and downloads one of <strong>Client A</strong>’s key packages</li>
+<li>The delivery service marks the <code>KeyPackage</code> as consumed (more on this below)</li>
+<li><strong>Client B</strong> uses the <strong>KeyPackage</strong> to generate a commit that adds <strong>Client A</strong> to the group</li>
+</ol>
+<p>Each key package has corresponding private keys; The <code>KeyPackageBundle</code> structure encapsulates a key package and its private keys:</p>
 <ul>
-<li>a public HPKE encryption key to enable MLS’ basic group key distribution feature</li>
-<li>the lifetime throughout which the key package is valid</li>
-<li>information about the client’s capabilities (i.e., which features of MLS it supports)</li>
-<li>any extension that the client wants to include</li>
-<li>one of the client’s <a href="#credentials">credentials</a>, as well as a signature over the whole key package using the private key corresponding to the credential’s signature public key</li>
+<li><code>key_package</code> (<code>KeyPackage</code>): Public key material and information required to add the client to a group</li>
+<li><code>private_init_key</code> (<code>HpkePrivateKey</code>): The private key required to decrypt the <code>Welcome</code> message that adds the client to a group</li>
+<li><code>private_encryption_key</code> (<code>EncryptionPrivateKey</code>): The private key used for group operations after the client was added</li>
 </ul>
-<h2 id="creating-key-packages"><a class="header" href="#creating-key-packages">Creating key packages</a></h2>
-<p>Before clients can communicate with each other using OpenMLS, they need to generate key packages and publish them with the Delivery Service. Clients can generate an arbitrary number of key packages ahead of time.</p>
-<p>Clients keep the private key material corresponding to a key package locally in the key store and fetch it from there when a key package was used to add them to a new group.</p>
-<p>Clients need to choose a few parameters to create a <code>KeyPackageBundle</code>:</p>
+<p>Key packages are meant to be used only once (<a href="https://www.rfc-editor.org/rfc/rfc9420.html#name-keypackage-reuse">unless it’s a last resort KeyPackage</a>). The Delivery Service should ensure that each (non-last resort) KeyPackage is only downloaded once.</p>
+<p>Clients should register multiple KeyPackages and one or more last-resort KeyPackages with the DS, and replenish them sufficiently frequently. This is to ensure that the DS’s KeyPackage supply is not exhausted (either through use or KeyPackage expiry) and that key material stays fresh.</p>
+<p>Each key package has a lifetime attached to it (<a href="../../openmls/src/key_packages/lifetime.rs#L13">default is <code>3 * 28</code> days</a>), so the client should keep that in mind when it comes to replenishing registered KeyPackages at the Delivery Service.</p>
+<p>Finally, a key package is identified within the protocol by a <a href="https://www.rfc-editor.org/rfc/rfc9420.html#name-hash-based-identifiers">“hash reference”</a>.</p>
+<h2 id="creating-keypackagebundles"><a class="header" href="#creating-keypackagebundles">Creating <code>KeyPackageBundle</code>s</a></h2>
+<p>A few parameters need to be determined in order to generate a <code>KeyPackageBundle</code>:</p>
 <ul>
 <li><code>ciphersuites: &amp;[CiphersuiteName]</code>: A list of ciphersuites supported by the client.</li>
-<li><code>extensions: Vec&lt;Extensions&gt;</code>: A list of supported extensions.</li>
+<li><code>extensions: Vec&lt;Extensions&gt;</code>: A list of extensions supported by the client.</li>
 </ul>
-<p>Clients must specify at least one ciphersuite and not advertise ciphersuites they do not support.</p>
-<p>Clients should specify all extensions they support. See the documentation of extensions for more details.</p>
-<pre><code class="language-rust no_run noplayground">    // Create the key package
-    KeyPackage::builder()
-        .key_package_extensions(extensions)
-        .build(ciphersuite, provider, signer, credential_with_key)
-        .unwrap()</code></pre>
-<p>This will also store the private key for the key package in the key store.</p>
-<p>All functions and structs related to key packages can be found in the <a href="https://docs.rs/openmls/latest/openmls/key_packages/index.html"><code>key_packages</code></a> module.</p>
+<p>The client must specify at least one ciphersuite per KeyPackage and it must not advertise ciphersuites it does not support.</p>
+<p>The client should advertise all extensions it supports. See the documentation of extensions for more details.</p>
+<p>A <code>KeyPackageBundle</code> can be generated through the <code>KeyPackage::builder()</code>:</p>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The following needs to be pre-defined:
+// - CIPHERSUITE (`Ciphersuite`)
+// - provider (`OpenMlsProvider`)
+// - signature_key_pair (`SignatureKeyPair`)
+// - credential (`BasicCredential`)
+
+let key_package_bundle = KeyPackage::builder()
+	.build(
+		CIPHERSUITE,
+		&amp;provider, 
+		&amp;signature_key_pair,
+		CredentialWithKey {
+			credential: credential.clone().into(),
+			signature_key: signature_key_pair.public().into(),
+		},
+	)?;
+
+// This is the exact data another client would need to add this client to a group (upload this to the Delivery Service)
+let key_package: Vec&lt;u8&gt; = key_package_bundle.key_package().tls_serialize_detached()?;
+
+// This is the key package's identifier within the protocol
+let hash_ref: Vec&lt;u8&gt; = key_package_bundle.key_package().hash_ref(provider.crypto())?.tls_serialize_detached()?
+<span class="boring">}</span></code></pre>
+<p>The private parts of the key package are automatically stored in the database.</p>
+<h2 id="getting-existing-key-packages"><a class="header" href="#getting-existing-key-packages">Getting existing key packages</a></h2>
+<p>OpenMLS does not provide an API for this; While you’re implementing <code>StorageProvider</code> for your local database, you can implement a <code>get_key_packages()</code> function that queries the storage to get that for you.</p>
+<h2 id="deleting-a-key-package-identified-by-hash-reference"><a class="header" href="#deleting-a-key-package-identified-by-hash-reference">Deleting a key package (identified by hash reference)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let hash_ref: Vec&lt;u8&gt; = ...;
+
+provider.storage().delete_key_package(
+	&amp;KeyPackageRef::tls_deserialize_exact_bytes(hash_ref.as_slice())?
+)?;
+<span class="boring">}</span></code></pre>
+<h2 id="appendix-keypackage-contents"><a class="header" href="#appendix-keypackage-contents">Appendix: <code>KeyPackage</code> contents</a></h2>
+<p>A <code>KeyPackage</code> (the public part of <a href="../../openmls/src/key_packages/mod.rs#L584"><code>KeyPackageBundle</code></a>) consists of:</p>
+<ul>
+<li>A public HPKE encryption key to enable MLS’ basic group key distribution feature</li>
+<li>The lifetime throughout which the key package is valid</li>
+<li>Information about the client’s capabilities (i.e., which features of MLS it supports)</li>
+<li>Any extension that the client wants to include</li>
+<li>One of the client’s <a href="#credentials">credentials</a>, as well as a signature over the whole key package using the private key corresponding to the credential’s signature public key</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="group-configuration"><a class="header" href="#group-configuration">Group configuration</a></h1>
 <p>Two very similar structs can help configure groups upon their creation: <code>MlsGroupJoinConfig</code> and <code>MlsGroupCreateConfig</code>.</p>
@@ -324,7 +371,7 @@ OpenMLS provides a <a href="https://github.com/openmls/openmls/tree/main/basic_c
 <tbody>
 <tr><td><code>wire_format_policy</code></td><td><code>WireFormatPolicy</code></td><td>Defines the wire format policy for outgoing and incoming handshake messages.</td></tr>
 <tr><td><code>padding_size</code></td><td><code>usize</code></td><td>Size of padding in bytes. The default is 0.</td></tr>
-<tr><td><code>max_past_epochs</code></td><td><code>usize</code></td><td>Maximum number of past epochs for which application messages can be decrypted. The default is 0.</td></tr>
+<tr><td><code>past_epoch_deletion_policy</code></td><td><code>PastEpochDeletionPolicy</code></td><td>Configures the number of past epochs for which application messages can be decrypted. The default is <code>MaxEpochs(0)</code>. For more information, see <a href="#past-epoch-secret-deletion">Past epoch secret deletion</a>.</td></tr>
 <tr><td><code>number_of_resumption_psks</code></td><td><code>usize</code></td><td>Number of resumption psks to keep. The default is 0.</td></tr>
 <tr><td><code>use_ratchet_tree_extension</code></td><td><code>bool</code></td><td>Flag indicating the Ratchet Tree Extension should be used. The default is <code>false</code>.</td></tr>
 <tr><td><code>sender_ratchet_configuration</code></td><td><code>SenderRatchetConfiguration</code></td><td>Sender ratchet configuration.</td></tr>
@@ -1185,6 +1232,447 @@ as well as the <code>GroupId</code> of the group to be loaded. For this to work,
 must have been written to the provider previously.</p>
 <h2 id="forward-secrecy-considerations"><a class="header" href="#forward-secrecy-considerations">Forward-Secrecy Considerations</a></h2>
 <p>OpenMLS uses the <code>StorageProvider</code> to store sensitive key material. To achieve forward-secrecy (i.e. to prevent an adversary from decrypting messages sent in the past if a client is compromised), OpenMLS frequently deletes previously used key material through calls to the <code>StorageProvider</code>. <code>StorageProvider</code> implementations must thus take care to ensure that values deleted through any of the <code>delete_</code> functions of the trait are irrevocably deleted and that no copies are kept.</p>
+<h2 id="integrity-considerations"><a class="header" href="#integrity-considerations">Integrity Considerations</a></h2>
+<p>OpenMLS treats the <code>StorageProvider</code> as trusted. Persisted group state
+carries invariants that OpenMLS does not check again when it reads that state
+back.</p>
+<p>An adversary that can modify stored group state is therefore outside of
+OpenMLS’s threat model Applications that need to cover this case should protect
+the storage backend itself, for example with authenticated encryption or a
+platform keystore.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="migrating-the-storage-provider"><a class="header" href="#migrating-the-storage-provider">Migrating the storage provider</a></h1>
+<p>OpenMLS supports migrating the storage provider between versions through a serialization bridge:
+a group, together with all the group-associated data it owns, is exported with the
+previous version of the library, serialized into <code>serde_json</code>, and
+then imported into the <em>current</em> version of the library, which writes it back out in the new storage format.</p>
+<p>The storage migration is a re-encoding of a member’s own stored, local state:
+it doesn’t change anything on the wire, and doesn’t need coordination with other group members.</p>
+<p>This migration approach requires the <code>migration-export</code> feature on the previous version’s <code>openmls</code>
+crate and the <code>migration-import</code> feature on the current one.</p>
+<h2 id="when-to-use-this"><a class="header" href="#when-to-use-this">When to use this</a></h2>
+<p>The main migration use case is switching to a self-describing <code>serde</code> storage format,
+between <code>openmls</code> versions that introduce breaking changes when using non-self-describing formats (which have not been disallowed by OpenMLS so far).</p>
+<p>The approach described here can be used to migrate data serialized using <code>0.7.4</code> or <code>0.8.1</code>
+into the format used by <code>0.9.0</code>, which requires a self-describing format.</p>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>As of this version, non-self-describing formats are no longer supported.
+When using non-self-describing formats, changes in struct layouts between <code>openmls</code> versions
+may silently shift the layout used for serialization, and corrupt existing data.</p>
+</blockquote>
+<p><strong>The migration target must use a self-describing format</strong> (such as JSON), even
+when the source did not: a current-version group cannot currently be stored in or loaded
+from a non-self-describing format like postcard. Migrating <em>in place while
+staying on a non-self-describing format</em> is therefore not supported — a
+self-describing format should be used for the current-version store.</p>
+<h2 id="migration-prerequisites"><a class="header" href="#migration-prerequisites">Migration prerequisites</a></h2>
+<ul>
+<li>Both the previous-version and the current-version OpenMLS crates should be in the
+dependency tree (e.g. <code>openmls_0_8_1</code> and <code>openmls</code>), the previous version with
+its <code>migration-export</code> feature, and the current one with <code>migration-import</code> enabled.
+<ul>
+<li><code>openmls-v0.7.4-migration-helpers</code></li>
+<li><code>openmls-v0.8.1-migration-helpers</code></li>
+</ul>
+</li>
+<li>A storage provider for each version: one implementing the <em>previous</em> version’s
+storage traits (holding the existing data), and one implementing the <em>current</em>
+version’s storage traits (receiving the migrated data).</li>
+</ul>
+<h2 id="migration-requirements"><a class="header" href="#migration-requirements">Migration requirements</a></h2>
+<p>The following requirements must be satisfied when migrating:</p>
+<ul>
+<li><strong>Quiescence.</strong> The migration must run while the local MLS state is at rest: no
+message is mid-processing, and nothing else — no other thread or process —
+touches the store being migrated until the migration completes. Group state that is
+legitimately pending at rest is fine: queued (uncommitted) proposals and a
+pending, not yet merged commit are both migrated and preserved.</li>
+<li><strong>Atomicity.</strong> Perform the migration (together with any cleanup of the old
+data, see below) within a single storage transaction, so that an interruption
+cannot leave a group partially migrated. Any such transaction has to come from
+the <em>backing store</em> (e.g. SQLite) — the OpenMLS storage traits have no
+transaction API — so it is only available if your backing store supports one.
+When it does not — and recommended in general — migrate into a <strong>fresh store</strong>,
+verify, then atomically swap it in and discard the old one.</li>
+<li><strong>Interruption tolerance.</strong> Import is a <em>replace</em>, not an append, so it is
+idempotent: re-running the migration after a crash is safe as long as the old
+data is still intact.</li>
+</ul>
+<p><strong>Prefer a fresh store over migrating in place.</strong> A transaction only protects
+against interruption, not against a migration defect, and an in-place
+migration that overwrites the same keys destroys the source data as it writes:
+once the transaction commits there is nothing left to verify against and
+nothing to roll back to. In-place with changed keys keeps the old entries
+longer, but its cleanup is item-wise deletion of key material in a live store,
+where anything missed lingers silently. Migrating into a fresh store keeps the
+source intact for verification and rollback, tolerates interruption even
+without a transactional store, and makes cleanup a simple discard. If the
+store itself cannot be swapped (e.g. it shares a database with other
+application data), it is better to migrate into a fresh table set or namespace within it,
+and swap that instead of overwriting.</p>
+<h2 id="performing-the-migration"><a class="header" href="#performing-the-migration">Performing the migration</a></h2>
+<p>For each group, the migration is performed by exporting it using the previous version’s API,
+then bridging the bundle through <code>serde_json</code>, and storing it with the current version:</p>
+<pre><code class="language-rust no_run noplayground">/// Migrate a single group from the previous OpenMLS version to the current one.
+///
+/// `old_provider` implements the *previous* version's storage traits and already
+/// holds the group; `new_provider` implements the *current* version's storage
+/// traits and receives the migrated group. Both refer to the same `group_id`.
+///
+/// This requires the `migration-export` feature on the previous version's
+/// `openmls` crate and the `migration-import` feature on the current one.
+///
+/// **NOTE**: The `migration-export` feature is not available on the current
+/// `openmls` version, since there are no supported migration paths that would
+/// utilize this feature yet, although it may be added later, if needed.
+fn migrate_group(
+    old_provider: &amp;PostcardProvider&lt;'_&gt;,
+    new_provider: &amp;SerdeJsonProvider&lt;'_&gt;,
+    group_id: &amp;openmls_compat::prelude::GroupId,
+) {
+    // 1. Export the group and all the group-associated data it owns, using the
+    //    *previous* version's API.
+    let bundle = openmls_compat::prelude::MlsGroup::export_for_migration(old_provider, group_id)
+        .expect("error reading the old storage")
+        .expect("no group with this id in the old storage");
+
+    // 2. Bridge the bundle through `serde_json` into the *current* version's
+    //    migration bundle. The intermediate buffer is zeroized on drop (see
+    //    `serde_json_bridge`).
+    let bundle: openmls_current::storage::GroupMigrationBundle =
+        serde_json_bridge(&amp;bundle).expect("error bridging the migration bundle through serde_json");
+
+    // 3. Write the group and all its data to storage in the current version's
+    //    format.
+    bundle
+        .store(new_provider)
+        .expect("error storing the migrated group");
+}</code></pre>
+<p>The target store need not be <code>serde_json</code>: the <code>new_provider</code> can be any current-version
+storage provider that uses a self-describing format. Only its type changes, and the
+migration body is identical. For example, to migrate into a CBOR-based (<code>ciborium</code>) store
+instead:</p>
+<pre><code class="language-rust no_run noplayground">fn migrate_group(
+    old_provider: &amp;PostcardProvider&lt;'_&gt;,
+    new_provider: &amp;CiboriumProvider&lt;'_&gt;,
+    group_id: &amp;openmls_compat::prelude::GroupId,
+) {
+    // ... migration ...
+}</code></pre>
+<p>The bundle is bridged with the small helper below, which serializes to JSON and
+deserializes into the current version’s type. Because the intermediate JSON buffer
+holds the group’s private keys in plaintext, it is kept in a <code>Zeroizing</code> buffer
+that is wiped when the helper returns (see <a href="#key-material-hygiene">Key material hygiene</a>).
+The same helper is reused for the application-managed material further down.</p>
+<pre><code class="language-rust no_run noplayground">/// Bridge a value across the serde_json version boundary: serialize `source` (a
+/// previous-version type) to JSON, then deserialize it as the current-version type
+/// `T`.
+///
+/// The intermediate JSON buffer holds the value's secret key material in plaintext.
+/// Unlike the typed `source` and returned `T` — whose secret fields are
+/// `SecretVLBytes` and are wiped on their own drop — a plain `Vec&lt;u8&gt;` is not
+/// scrubbed when freed, so it is held in a `Zeroizing` buffer that is wiped when
+/// this function returns, on the error path as well as on success.
+///
+/// Keep the bridge on this byte-buffer path (`to_vec` / `from_slice`)
+/// rather than routing it through `serde_json::Value`.
+fn serde_json_bridge&lt;S: serde::Serialize, T: serde::de::DeserializeOwned&gt;(
+    source: &amp;S,
+) -&gt; Result&lt;T, serde_json::Error&gt; {
+    let serialized = zeroize::Zeroizing::new(serde_json::to_vec(source)?);
+    serde_json::from_slice(&amp;serialized)
+}</code></pre>
+<p>This flow is performed once per group, observing the invariants in
+<a href="#migration-requirements">Migration requirements</a>; afterwards the group loads normally
+with the current-version <code>MlsGroup::load</code>.</p>
+<h2 id="what-is-not-migrated"><a class="header" href="#what-is-not-migrated">What is not migrated</a></h2>
+<p>The migration bundle carries the group and all group-associated data OpenMLS owns
+— group state, queued proposals, a pending commit if stored, the group’s encryption key
+pairs, and the group’s resumption PSK store (which covers resumption, reinit, and branch PSKs).
+Application-managed material that OpenMLS does <em>not</em> own — signature key
+pairs, <em>external</em> PSKs (and application-component PSKs), and key packages — is not group-scoped,
+and is not part of the migration bundle. If you keep this data in the same store, migrate it
+separately with the same read → bridge → write pattern over the ids that your application tracks.</p>
+<h3 id="migrating-data-that-is-managed-by-the-application"><a class="header" href="#migrating-data-that-is-managed-by-the-application">Migrating data that is managed by the application</a></h3>
+<p>All three cases below use the existing public storage APIs. Each takes a value (or its
+id) from the previous version and produces the current-version equivalent in the
+new store.</p>
+<p><strong>Signature key pairs</strong> bridge directly through <code>serde_json</code>:</p>
+<pre><code class="language-rust no_run noplayground">/// Migrate one application-managed signature key pair by bridging it through
+/// `serde_json`: serialize the previous version's `SignatureKeyPair`, deserialize
+/// it as the current version's type, and store it in the current provider.
+fn migrate_signature_key_pair(
+    old_signer: &amp;openmls_basic_credential_compat::SignatureKeyPair,
+    new_storage: &amp;SerdeJsonProvider&lt;'_&gt;,
+) -&gt; openmls_basic_credential_current::SignatureKeyPair {
+    let signer: openmls_basic_credential_current::SignatureKeyPair =
+        serde_json_bridge(old_signer).expect("bridge signer into the current version");
+    signer
+        .store(new_storage)
+        .expect("store the migrated signer");
+    signer
+}</code></pre>
+<p><strong>Published key packages</strong> are read from the old store by the hash reference your
+application tracks, bridged, and written to the new store:</p>
+<pre><code class="language-rust no_run noplayground">/// Migrate one key package. The application supplies the hash reference
+/// it tracks (OpenMLS keys stored key packages by it). We read the stored
+/// `KeyPackageBundle` with the previous version's storage API, bridge it through
+/// `serde_json`, and write it to the current store under its current-version hash
+/// reference. Returns that current-version hash reference so the application can
+/// track it and load the migrated key package back from the new store.
+///
+/// The two `StorageProvider` traits (previous and current version) are brought
+/// into scope in separate blocks: the backing `PostcardProvider` implements both,
+/// so keeping only one in scope per call avoids an ambiguous method resolution.
+fn migrate_key_package&lt;NewProvider: openmls_traits::OpenMlsProvider&gt;(
+    old_storage: &amp;PostcardProvider&lt;'_&gt;,
+    old_hash_ref: &amp;openmls_compat::prelude::KeyPackageRef,
+    new_provider: &amp;NewProvider,
+) -&gt; openmls_current::prelude::KeyPackageRef {
+    // 1. Read the stored bundle (public key package + private init and encryption
+    //    keys) with the previous version's storage API.
+    let old_bundle: KeyPackageBundle = {
+        use openmls_traits_compat::storage::StorageProvider as _;
+        old_storage
+            .key_package(old_hash_ref)
+            .expect("read the old key package")
+            .expect("no key package stored under this hash ref")
+    };
+
+    // 2. Bridge it through `serde_json` into the current version's type.
+    let bundle: openmls_current::prelude::KeyPackageBundle =
+        serde_json_bridge(&amp;old_bundle).expect("bridge key package into the current version");
+
+    // 3. Write it to the current store, keyed by its current-version hash ref.
+    let new_hash_ref = bundle
+        .key_package()
+        .hash_ref(new_provider.crypto())
+        .expect("compute the current key package hash ref");
+    {
+        use openmls_traits::storage::StorageProvider as _;
+        new_provider
+            .storage()
+            .write_key_package(&amp;new_hash_ref, &amp;bundle)
+            .expect("write the migrated key package");
+    }
+
+    new_hash_ref
+}</code></pre>
+<p><strong>Pre-shared keys</strong> split by type. <em>Resumption</em> PSKs — including the <em>reinit</em> and <em>branch</em>
+usages — are group-owned: OpenMLS keeps them in the group’s resumption PSK store and they
+travel <em>inside</em> the group migration bundle, so they need no separate handling. Only
+<em>external</em> PSKs (and, under <code>extensions-draft</code>, application-component PSKs) are
+application-managed. Their secret is supplied by the application and written with
+<code>PreSharedKeyId::store</code>; the stored bundle is not publicly readable, so — unlike the two
+cases above — there is nothing to read and bridge. Migrating one re-stores the
+application-held secret under a current-version <code>PreSharedKeyId</code>. The nonce is not
+persisted (see <code>PreSharedKeyId::store</code>), so only the PSK id has to match:</p>
+<pre><code class="language-rust no_run noplayground">/// Migrate one application-managed pre-shared key (an *external* PSK, or an
+/// `extensions-draft` *application* component PSK).
+///
+/// These PSK secrets are *supplied by the application* and written with
+/// `PreSharedKeyId::store`, and the stored bundle is not publicly readable — so there
+/// is nothing to read back out of the old store. The application already holds the psk
+/// id and the secret bytes it tracks; migrating one is simply re-storing that secret
+/// into the new provider under a current-version `PreSharedKeyId`. (The nonce is not
+/// persisted, so only the psk id identifies the stored secret.)
+///
+/// *Resumption* PSKs (including the reinit and branch usages) are **not** handled here:
+/// they are group-owned, kept in the group's resumption psk store, and are carried
+/// automatically by the group migration bundle.
+fn migrate_psk&lt;NewProvider: openmls_traits::OpenMlsProvider&gt;(
+    psk_id: &amp;openmls_current::schedule::PreSharedKeyId,
+    secret: &amp;[u8],
+    new_provider: &amp;NewProvider,
+) {
+    psk_id
+        .store(new_provider, secret)
+        .expect("store the migrated PSK secret");
+}</code></pre>
+<p>This assumes the application still holds the PSK secret. If an external PSK was stored only
+through OpenMLS and the secret was not retained elsewhere, there is currently no public API
+to read it back out of the old store, so there is no migration path for it.</p>
+<h2 id="migration-recommendations"><a class="header" href="#migration-recommendations">Migration recommendations</a></h2>
+<h3 id="verifying-the-migration"><a class="header" href="#verifying-the-migration">Verifying the migration</a></h3>
+<p>Before relying on the migrated store, and before any cleanup, load each group
+with the current-version <code>MlsGroup::load</code> and sanity-check what the application
+expects (e.g., the epoch and the member list). If any group fails to export,
+bridge, or load, then fail closed: abort the migration, keep the old data, and report
+the error, rather than continuing with a partially migrated store.</p>
+<p><strong>Recommendation</strong>: Store a <strong>schema-version marker</strong> alongside the data so the migration runs
+exactly once and the application always knows which format the store holds.</p>
+<h2 id="cleaning-up-the-old-data"><a class="header" href="#cleaning-up-the-old-data">Cleaning up the old data</a></h2>
+<p>Whether the old data needs to be removed depends on how you migrate:</p>
+<ul>
+<li><strong>Into a fresh or separate store:</strong> simply discard the old store once every
+group has been migrated; there is nothing else to clean up.</li>
+<li><strong>In-place, when the storage keys change:</strong> moving between a non-self-describing
+and a self-describing format generally changes how storage keys are encoded, so
+the new entries are written under <em>new</em> keys and the old entries remain behind.
+Remove them by loading each group with the previous version’s API and calling
+its <code>MlsGroup::delete</code> on the old storage provider.</li>
+<li><strong>In-place, when the storage keys are unchanged</strong> (e.g. toggling a feature flag,
+or a same-format update): the import overwrites the existing entries, so no
+separate cleanup is needed — and deleting would remove the freshly migrated
+data.</li>
+</ul>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>Rolling back to retained old data is only safe before the first use after migration.
+Afterwards, once a migrated group sends or processes anything, the ratchet state in the old store
+becomes stale, and reverting to it forks the group and risks key reuse. The old store should not
+be kept as a rollback path after the migrated state is used.</p>
+</blockquote>
+<h2 id="running-the-migration-in-an-application"><a class="header" href="#running-the-migration-in-an-application">Running the migration in an application</a></h2>
+<p>There are two strategies for <em>when</em> to migrate. An application chooses based on how
+much local state it holds and how much startup latency it can absorb:</p>
+<ol>
+<li><strong>Migrate everything at startup</strong> — simplest, and lets you discard the old store
+promptly, but blocks startup for as long as the migration takes.</li>
+<li><strong>Migrate lazily, one group at a time</strong> — no startup stall, at the cost of the
+old and new stores coexisting for the whole support window.</li>
+</ol>
+<p>The following apply to <strong>both</strong> strategies (particularly for an application with
+local storage on end-user devices, e.g. a mobile app):</p>
+<ul>
+<li><strong>Watch for other processes touching the store.</strong> For example, an iOS
+Notification Service Extension that decrypts MLS messages runs in a different
+process and can wake on a push mid-migration; hold a cross-process lock or gate
+it on the migration marker.</li>
+<li><strong>Expect interruption.</strong> Mobile operating systems terminate apps freely, so the
+migration can be cut short at any point — the idempotent design above makes this
+safe. The migration should be run off of the main thread.</li>
+<li><strong>Plan the release lifecycle.</strong> One “migration release” of the application ships
+both OpenMLS versions; keep the migration path for a defined support window (an
+enforced minimum client version, telemetry on remaining un-migrated installs, or
+a stated time period). The release that finally removes it must keep the marker
+check and ship a fallback — resetting the local MLS state and rejoining groups —
+because users can jump arbitrary version gaps when updating.</li>
+</ul>
+<h3 id="option-1-migrate-everything-at-startup"><a class="header" href="#option-1-migrate-everything-at-startup">Option 1: migrate everything at startup</a></h3>
+<ul>
+<li><strong>Run at startup, before any MLS traffic.</strong> Application startup is a natural
+quiescence point: gate all message processing and outbound operations on the
+migration having completed, checked via a single, store-wide schema-version
+marker.</li>
+<li><strong>Migrate into a fresh store, then swap.</strong> Following
+<a href="#migration-requirements">Migration requirements</a>, migrate into a fresh store,
+verify every group, then atomically swap it in and discard the old one.</li>
+<li><strong>Check disk space.</strong> Migrating into a fresh store temporarily roughly doubles
+the storage footprint.</li>
+</ul>
+<p>This option is the simplest and cleans up after itself, but the startup delay is
+proportional to the <em>total</em> stored state — every group’s ratchet tree and retained
+epochs. For an install with many or large groups that stall may be unacceptable;
+use Option 2 instead.</p>
+<h3 id="option-2-migrate-lazily-one-group-at-a-time"><a class="header" href="#option-2-migrate-lazily-one-group-at-a-time">Option 2: migrate lazily, one group at a time</a></h3>
+<p>Migrate each group the first time the application loads it, recording a <strong>per-group</strong>
+marker so each group is migrated exactly once and already-migrated groups load
+directly from the current store:</p>
+<pre><code class="language-rust no_run noplayground">/// Load a group from the current-version store, migrating it from the previous
+/// version *on first access* if it has not been migrated yet.
+///
+/// This is the building block of a **lazy, per-group** migration: instead of
+/// migrating every group up front (a startup stall), each group is migrated the
+/// first time the application needs it, exactly once. A per-group marker — a row in
+/// the application's own store, here `CiboriumProvider::mark_group_migrated` —
+/// records that a group has been migrated so it is never migrated twice, and so an
+/// already-migrated group is loaded directly from the current store.
+fn lazy_load_or_migrate(
+    old_provider: &amp;PostcardProvider&lt;'_&gt;,
+    new_provider: &amp;CiboriumProvider&lt;'_&gt;,
+    group_id_bytes: &amp;[u8],
+) -&gt; openmls_current::prelude::MlsGroup {
+    let new_group_id = openmls_current::prelude::GroupId::from_slice(group_id_bytes);
+
+    // Migrate this group only if it has not been migrated into the new store yet.
+    // The marker is keyed by the (current-version) group id, checked through the
+    // same provider used to load it.
+    if !new_provider.is_group_migrated(&amp;new_group_id) {
+        let old_group_id = openmls_compat::prelude::GroupId::from_slice(group_id_bytes);
+        let bundle =
+            openmls_compat::prelude::MlsGroup::export_for_migration(old_provider, &amp;old_group_id)
+                .expect("error reading the old storage")
+                .expect("no group with this id in the old storage");
+        let bundle: openmls_current::storage::GroupMigrationBundle =
+            serde_json_bridge(&amp;bundle).expect("error bridging the migration bundle");
+        bundle
+            .store(new_provider)
+            .expect("error storing the migrated group");
+
+        // Set the marker
+        new_provider.mark_group_migrated(&amp;new_group_id);
+    }
+
+    openmls_current::prelude::MlsGroup::load(new_provider, &amp;new_group_id)
+        .expect("error loading the migrated group")
+        .expect("no migrated group state persisted")
+}</code></pre>
+<p>The helper above is deliberately minimal: it assumes every group still lives in the
+old store. A shipped version must also handle groups <strong>created or joined under the
+new version</strong> — those were never in the old store, so they should load directly from
+the current store rather than attempt an export that would find nothing. Setting the
+marker when the application creates or joins a group lets them skip the check.</p>
+<p>Guidance specific to this strategy:</p>
+<ul>
+<li><strong>The marker is per-group, not store-wide.</strong> Store it in the current store, keyed
+by group id the same way the store keys the group’s own data, and set it only
+<em>after</em> that group’s migrated state has been written. Because import is an
+idempotent replace, an interruption before the marker is set simply re-runs that
+group’s migration on the next access — no transaction required.</li>
+<li><strong>Lock per group.</strong> A group’s first access can come from more than one place at
+the same time — e.g. the UI opening a conversation while a push handler processes a
+message for it, possibly in a different process. Take a lock keyed by the group id
+that spans the marker check, the migration, and setting the marker, so a given
+group is accessed by only one caller at a time. (A single global lock also works —
+e.g. relying on SQLite’s single-writer — trading some concurrency for simplicity.)
+A single, shared group-loading path can be a convenient place to enforce this
+together with the migrate-on-access check.</li>
+<li><strong>Migrate application-managed material eagerly.</strong> Signature key pairs, key
+packages, and PSKs are not group-scoped (a signature key pair can back several
+groups), so they cannot be partitioned per group. They are also small, so migrate
+them up front: this keeps any residual startup cost tiny while the expensive
+per-group state migrates on demand, and guarantees a lazily-migrated group is
+immediately operable.</li>
+<li><strong>Quiescence is per-group.</strong> Migrate a group before processing its traffic, and
+gate that group’s processing (including from other processes) on its marker.</li>
+<li><strong>The two stores coexist for the whole support window.</strong> You cannot discard the
+old store promptly or swap it out, because un-accessed groups still live there.
+Clean up each group’s old data after it has been migrated (via the previous
+version’s <code>MlsGroup::delete</code>, see <a href="#cleaning-up-the-old-data">Cleaning up the old data</a>)
+. Track how many groups remain
+un-migrated, so you know when it is safe to retire the old-version code.</li>
+<li><strong>Rollback is per-group.</strong> The “rollback only before first use” rule applies to
+each group independently: once a lazily-migrated group has been used, its old copy
+is stale and must not be reverted to.</li>
+<li><strong>Binary size.</strong> Only code reachable from <code>export_for_migration</code> is linked
+from the previous version — storage reads and serde impls, no crypto backend,
+no protocol machinery — and the linker strips the rest. Measure (e.g. with
+<code>cargo bloat</code>) if you are concerned about binary size.</li>
+</ul>
+<h3 id="key-material-hygiene"><a class="header" href="#key-material-hygiene">Key material hygiene</a></h3>
+<ul>
+<li>
+<p><strong>Never log or upload the migration bundle.</strong> The serialized <code>GroupMigrationBundle</code> contains
+private encryption keys in plaintext JSON. Error reports and diagnostics must not
+include the migration bundle, value diffs, or any deserialization error messages
+that embed the offending content. The bundle should also stay in memory, and never
+be written to a temp file for debugging.</p>
+</li>
+<li>
+<p>Create the fresh store with the same protections as the old. Same at-rest encryption
+(e.g. SQLCipher key), and on desktop, restrictive file permissions set before the data is written,
+not fixed up after.</p>
+</li>
+<li>
+<p><strong>Wipe the intermediate serialized buffer.</strong> The <code>serde_json_bridge</code> helper keeps
+the plaintext-JSON buffer in a <code>Zeroizing</code> wrapper so it is scrubbed on drop. This approach is best-effort,
+since <code>serde_json</code> may make intermediate copies during (de)serialization that cannot be reached and cleared.
+Keep the bridge on the <code>to_vec</code> / <code>from_slice</code> byte path rather than
+<code>serde_json::Value</code>. <!-- TODO: add more details on this --></p>
+</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="discarding-commits"><a class="header" href="#discarding-commits">Discarding commits</a></h1>
 <p>The delivery service may reject a commit sent by a client. In this case, the application needs to ensure that the local state remains the same as it was before the commit was staged.</p>
@@ -1231,7 +1719,7 @@ other members in two instances:</p>
 <h1 id="working-with-appdata"><a class="header" href="#working-with-appdata">Working with AppData</a></h1>
 <blockquote class="blockquote-tag blockquote-tag-important">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
-<p>Currently this functionality is behind the <code>extensions-draft-08</code> feature.</p>
+<p>Currently this functionality is behind the <code>extensions-draft</code> feature.</p>
 </blockquote>
 <p>So far, applications could store group state that all members should agree on in custom
 extensions.
@@ -1265,7 +1753,7 @@ to 16 bit. We are using 16 bit ComponentIDs. More context in issue <a href="http
 <li>Decrementing below zero is invalid and will cause the commit to be rejected</li>
 </ul>
 <pre><code class="language-rust no_run noplayground">/// Our counter component ID (in the private range 0x8000..0xffff)
-const COUNTER_COMPONENT_ID: u16 = 0xf042;
+const COUNTER_COMPONENT_ID: ComponentId = 0xf042;
 
 /// The operations that can be performed on the counter
 #[repr(u8)]
@@ -1410,7 +1898,17 @@ fn setup_group_with_app_data_support&lt;'a, Provider: OpenMlsProvider&gt;(
 <h2 id="sending-and-receiving-proposals"><a class="header" href="#sending-and-receiving-proposals">Sending and receiving proposals</a></h2>
 <p>This part doesn’t really change.</p>
 <p>Alice sends a proposal to increment the counter:</p>
-<pre><code class="language-rust no_run noplayground">./tests/book_code_app_data.rs:send_proposal}}</code></pre>
+<pre><code class="language-rust no_run noplayground">    // Alice sends a standalone proposal to increment the counter.
+    // This proposal will be included in a later commit by reference.
+    let (proposal_message, _proposal_ref) = alice
+        .group
+        .propose_app_data_update(
+            &amp;alice_party.provider,
+            &amp;alice.party.signer,
+            COUNTER_COMPONENT_ID,
+            AppDataUpdateOperation::Update(CounterOperation::Increment.to_bytes().into()),
+        )
+        .expect("failed to create proposal");</code></pre>
 <p>Bob receives and stores the proposal:</p>
 <pre><code class="language-rust no_run noplayground">    // Bob receives and stores the proposal
     let processed_proposal = bob
@@ -1480,85 +1978,54 @@ fn setup_group_with_app_data_support&lt;'a, Provider: OpenMlsProvider&gt;(
 
     let (commit_message, _welcome, _group_info) = commit_bundle.into_contents();</code></pre>
 <h2 id="receiving-commits"><a class="header" href="#receiving-commits">Receiving Commits</a></h2>
-<p>Bob receives the commit and must independently compute the same new state. He iterates over the proposals in the commit, resolving references from his proposal store:</p>
+<p>Bob receives the commit and must independently compute the same new state.
+When a commit covers <code>AppDataUpdate</code> proposals, <code>process_message</code> returns it as
+<code>ProcessedMessageContent::UnresolvedAppDataCommit</code> instead of a staged commit:
+the message signature has already been verified, but staging is paused until
+the application has interpreted the proposals. Bob iterates over the covered
+proposals (references are already resolved from his proposal store), computes
+the new state and resumes staging with <code>stage_app_data_commit</code>:</p>
 <pre><code class="language-rust no_run noplayground">    // Bob receives the commit and must independently compute the same new state.
 
-    // First, unprotect (decrypt) the message
+    // Process the message. Since the commit covers AppDataUpdate proposals,
+    // it comes back as an UnresolvedAppDataCommit: the signature has been
+    // verified, but staging is paused until Bob supplies the computed updates.
     let commit_in: MlsMessageIn = commit_message.into();
-    let unverified_message = bob
+    let processed_message = bob
         .group
-        .unprotect_message(
+        .process_message(
             &amp;bob_party.provider,
             commit_in
                 .into_protocol_message()
                 .expect("not a protocol message"),
         )
-        .expect("failed to unprotect message");
+        .expect("failed to process message");
 
-    // Create an updater for Bob
-    let mut bob_updater = bob.group.app_data_dictionary_updater();
-
-    // Get the proposals from the commit
-    let committed_proposals = unverified_message
-        .committed_proposals()
-        .expect("not a commit");
-
-    // Process each proposal, resolving references from the proposal store
-    let mut app_data_updates: Vec&lt;AppDataUpdateProposal&gt; = Vec::new();
-
-    for proposal_or_ref in committed_proposals.iter() {
-        // Validate and potentially resolve the reference
-        let validated = proposal_or_ref
-            .clone()
-            .validate(
-                bob_party.provider.crypto(),
-                ciphersuite,
-                ProtocolVersion::Mls10,
-            )
-            .expect("invalid proposal");
-
-        // Resolve to the actual proposal
-        let proposal: Box&lt;Proposal&gt; = match validated {
-            ProposalOrRef::Proposal(proposal) =&gt; proposal,
-            ProposalOrRef::Reference(reference) =&gt; {
-                // Look up the proposal in the proposal store
-                bob.group
-                    .proposal_store()
-                    .proposals()
-                    .find(|p| p.proposal_reference_ref() == &amp;*reference)
-                    .map(|p| Box::new(p.proposal().clone()))
-                    .expect("proposal not found in store")
-            }
-        };
-
-        // Collect AppDataUpdate proposals for processing
-        if let Proposal::AppDataUpdate(app_data_proposal) = *proposal {
-            app_data_updates.push(*app_data_proposal);
-        }
-    }
-
-    // Process the collected proposals
-    process_app_data_proposals(&amp;mut bob_updater, app_data_updates.iter())
-        .expect("failed to process proposals");
-
-    // Now process the message with the computed updates
-    let processed_message = bob
-        .group
-        .process_unverified_message_with_app_data_updates(
-            &amp;bob_party.provider,
-            unverified_message,
-            bob_updater.changes(),
-        )
-        .expect("failed to process commit");
-
-    // Extract and merge the staged commit
-    let staged_commit = match processed_message.into_content() {
-        ProcessedMessageContent::StagedCommitMessage(commit) =&gt; commit,
-        _ =&gt; panic!("expected a staged commit"),
+    let unresolved_commit = match processed_message.into_content() {
+        ProcessedMessageContent::UnresolvedAppDataCommit(unresolved_commit) =&gt; unresolved_commit,
+        _ =&gt; panic!("expected an unresolved app data commit"),
     };
 
+    // Create an updater for Bob and compute the new state. The proposals are
+    // already verified, resolved from the proposal store and sorted by
+    // component ID.
+    let mut bob_updater = bob.group.app_data_dictionary_updater();
+
+    process_app_data_proposals(
+        &amp;mut bob_updater,
+        unresolved_commit.app_data_update_proposals(),
+    )
+    .expect("failed to process proposals");
+    let updates = bob_updater.changes();
+
+    // Resume staging with the computed updates
+    let staged_commit = bob
+        .group
+        .stage_app_data_commit(&amp;bob_party.provider, *unresolved_commit, updates)
+        .expect("failed to stage commit");
+
     bob.group
-        .merge_staged_commit(&amp;bob_party.provider, *staged_commit)
+        .merge_staged_commit(&amp;bob_party.provider, staged_commit)
         .expect("failed to merge commit");</code></pre>
 <p>After both parties merge, they should have identical state:</p>
 <pre><code class="language-rust no_run noplayground">    // Both parties should now have identical state
@@ -2034,7 +2501,7 @@ Notice how Alice needs to provide a new key package for Bob.</p>
     let (commit, welcome, _) = readd_messages.into_contents();
     let welcome = welcome.unwrap();
     let processed_welcome =
-        ProcessedWelcome::new_from_welcome(bob_provider, &amp;mls_group_config, welcome).unwrap();
+        ProcessedWelcome::new_from_welcome(bob_provider, mls_group_config, welcome).unwrap();
     let bob_group = JoinBuilder::new(bob_provider, processed_welcome)
         .replace_old_group()
         .build()
@@ -2333,10 +2800,20 @@ do, we provide two implementations that can be used.</p>
 <p><strong>Rust Crypto Provider</strong>
 The go-to default at the moment is an implementation using commonly used, native
 Rust crypto implementations.</p>
+<p>Supported ciphersuites</p>
+<ul>
+<li>MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519</li>
+<li>MLS_128_DHKEMX25519_CHACHA20POLY1305_SHA256_Ed25519</li>
+<li>MLS_128_DHKEMP256_AES128GCM_SHA256_P256</li>
+</ul>
 <p><strong>Libcrux Crypto Provider</strong>
-A crypto provider backed by the high-assurance cryptography library [libcrux].
-Currently only supports relatively modern x86 and amd64 CPUs, as it requires
-AES-NI, SIMD and AVX.</p>
+A crypto provider backed by the high-assurance cryptography library [libcrux].</p>
+<p>Supported ciphersuites</p>
+<ul>
+<li>MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519</li>
+<li>MLS_128_DHKEMX25519_CHACHA20POLY1305_SHA256_Ed25519</li>
+<li>MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519</li>
+</ul>
 <h2 id="the-traits"><a class="header" href="#the-traits">The Traits</a></h2>
 <p>There are 4 different traits defined in the <a href="https://crates.io/crates/openmls_traits">OpenMLS traits crate</a>.</p>
 <h3 id="openmlsrand"><a class="header" href="#openmlsrand">OpenMlsRand</a></h3>
@@ -2405,6 +2882,18 @@ pub mod traits {
     pub trait MlsGroupJoinConfig&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
     pub trait LeafNode&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
     pub trait ApplicationExportTree&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait VcEpochId&lt;const VERSION: u16&gt;: Key&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait VcDerivationEpochState&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait VcEmulationBindings&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait RegisteredVcDerivationEpoch&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait VcOperationTree&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
+    #[cfg(feature = "virtual-clients-draft")]
+    pub trait RetainedKeyPackageMaterial&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; {}
 
     // traits for types that implement both
     pub trait ProposalRef&lt;const VERSION: u16&gt;: Entity&lt;VERSION&gt; + Key&lt;VERSION&gt; {}
@@ -2487,7 +2976,8 @@ combine it with one of the provided crypto and randomness trait implementations.
 identifiers.</p>
 <p><strong>AEADs</strong></p>
 <p>The following AEADs are defined.</p>
-<pre><code class="language-rust no_run noplayground">#[derive(Debug, PartialEq, Eq, Clone, Copy, Serialize, Deserialize)]
+<pre><code class="language-rust no_run noplayground">
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Serialize, Deserialize)]
 #[repr(u16)]
 /// AEAD types
 pub enum AeadType {
@@ -2495,8 +2985,7 @@ pub enum AeadType {
     Aes128Gcm = 0x0001,
 
     /// AES GCM 256
-    Aes256Gcm = 0x0002,
-</code></pre>
+    Aes256Gcm = 0x0002,</code></pre>
 <p>An AEAD provides the following functions to get the according values for each
 algorithm.</p>
 <ul>
@@ -2506,11 +2995,11 @@ algorithm.</p>
 </ul>
 <p><strong>Hashing</strong></p>
 <p>The following hash algorithms are defined.</p>
-<pre><code class="language-rust no_run noplayground">#[repr(u8)]
+<pre><code class="language-rust no_run noplayground">#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[repr(u8)]
 #[allow(non_camel_case_types)]
 /// Hash types
-pub enum HashType {
-    Sha2_256 = 0x04,</code></pre>
+pub enum HashType {</code></pre>
 <p>A hash algorithm provides the following functions to get the according values for each
 algorithm.</p>
 <ul>
@@ -2518,7 +3007,9 @@ algorithm.</p>
 </ul>
 <p><strong>Signatures</strong></p>
 <p>The following signature schemes are defined.</p>
-<pre><code class="language-rust no_run noplayground">    TlsDeserializeBytes,
+<pre><code class="language-rust no_run noplayground">    TlsSerializeBytes,
+    TlsDeserialize,
+    TlsDeserializeBytes,
     TlsSize,
 )]
 #[repr(u16)]
@@ -2527,17 +3018,28 @@ pub enum SignatureScheme {
     ECDSA_SECP256R1_SHA256 = 0x0403,
     /// ECDSA_SECP384R1_SHA384
     ECDSA_SECP384R1_SHA384 = 0x0503,
-    /// ECDSA_SECP521R1_SHA512
-    ECDSA_SECP521R1_SHA512 = 0x0603,
-    /// ED25519</code></pre>
+    /// ECDSA_SECP521R1_SHA512</code></pre>
 <h1 id="hpke-types"><a class="header" href="#hpke-types">HPKE Types</a></h1>
 <p>The HPKE implementation is part of the crypto provider as well.
 The crate, therefore, defines the necessary types too.</p>
 <p>The HPKE algorithms are defined as follows.</p>
-<pre><code class="language-rust no_run noplayground">
-/// KEM Types for HPKE
-#[derive(PartialEq, Eq, Copy, Clone, Debug, Serialize, Deserialize)]
-#[repr(u16)]
+<pre><code class="language-rust no_run noplayground">    SigningError,
+    InvalidPublicKey,
+}
+
+impl std::fmt::Display for CryptoError {
+    fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter&lt;'_&gt;) -&gt; std::fmt::Result {
+        write!(f, "{self:?}")
+    }
+}
+
+impl std::error::Error for CryptoError {}
+
+// === HPKE === //
+
+/// Convenience tuple struct for an HPKE configuration.
+#[derive(Debug)]</code></pre>
+<pre><code class="language-rust no_run noplayground">#[repr(u16)]
 pub enum HpkeKemType {
     /// DH KEM on P256
     DhKemP256 = 0x0010,
@@ -2546,42 +3048,29 @@ pub enum HpkeKemType {
     DhKemP384 = 0x0011,
 
     /// DH KEM on P521
-    DhKemP521 = 0x0012,
+    DhKemP521 = 0x0012,</code></pre>
+<pre><code class="language-rust no_run noplayground">    /// DH KEM on x448
+    DhKem448 = 0x0021,
 
-    /// DH KEM on x25519
-    DhKem25519 = 0x0020,</code></pre>
-<pre><code class="language-rust no_run noplayground">    /// XWing combiner for ML-KEM and X25519
-    XWingKemDraft6 = 0x004D,
-}
+    /// ML-KEM-768
+    #[cfg(feature = "draft-ietf-mls-pq-ciphersuites")]
+    MlKem768 = 0x0041,
 
-/// KDF Types for HPKE
-#[derive(PartialEq, Eq, Copy, Clone, Debug, Serialize, Deserialize)]
-#[repr(u16)]
-pub enum HpkeKdfType {
-    /// HKDF SHA 256
-    HkdfSha256 = 0x0001,</code></pre>
-<pre><code class="language-rust no_run noplayground">    /// HKDF SHA 512
+    /// ML-KEM-1024
+    #[cfg(feature = "draft-ietf-mls-pq-ciphersuites")]
+    MlKem1024 = 0x0042,
+
+    /// XWing combiner for ML-KEM and X25519
+    #[cfg(feature = "draft-ietf-mls-pq-ciphersuites")]</code></pre>
+<p>In addition, helper structs for <code>HpkeCiphertext</code> and <code>HpkeKeyPair</code> are defined.</p>
+<pre><code class="language-rust no_run noplayground">
+    /// HKDF SHA 512
     HkdfSha512 = 0x0003,
-}
-
-/// AEAD Types for HPKE.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[repr(u16)]
+}</code></pre>
+<pre><code class="language-rust no_run noplayground">#[repr(u16)]
 pub enum HpkeAeadType {
     /// AES GCM 128
-    AesGcm128 = 0x0001,
-
-    /// AES GCM 256
-    AesGcm256 = 0x0002,</code></pre>
-<p>In addition, helper structs for <code>HpkeCiphertext</code> and <code>HpkeKeyPair</code> are defined.</p>
-<pre><code class="language-rust no_run noplayground">///     opaque kem_output&lt;V&gt;;
-///     opaque ciphertext&lt;V&gt;;
-/// } HPKECiphertext;
-/// ```</code></pre>
-<pre><code class="language-rust no_run noplayground">    Eq,
-    Clone,
-    Serialize,
-    Deserialize,</code></pre>
+    AesGcm128 = 0x0001,</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="message-validation"><a class="header" href="#message-validation">Message Validation</a></h1>
 <p>OpenMLS implements a variety of syntactical and semantical checks, both when parsing and processing incoming commits and when creating own commits.</p>
@@ -2931,15 +3420,446 @@ part of an update that someone else committed for them. The key material in the 
 <p>OpenMLS can address 3 scenarios:</p>
 <ul>
 <li>
-<p>The Delivery Service cannot guarantee that application messages from one epoch are sent before the beginning of the next epoch. To address this, applications can configure their groups to keep the necessary key material around for past epochs by setting the <code>max_past_epochs</code> field in the <code>MlsGroupCreateConfig</code> to the desired number of epochs.</p>
+<p>The Delivery Service cannot guarantee that application messages from one epoch are sent before the beginning of the next epoch. To address this, applications can configure their groups to keep the necessary key material around for past epochs by configuring the past epoch deletion policy on the <code>MlsGroupCreateConfig</code>.For more information, see <a href="#past-epoch-secret-deletion">Past epoch secret deletion</a>.</p>
 </li>
 <li>
-<p>The Delivery Service cannot guarantee that application messages will arrive in order within the same epoch. To address this, applications can configure the <code>out_of_order_tolerance</code> parameter of the <code>SenderRatchetConfiguration</code>. The configuration can be set as the <code>sender_ratchet_configuration</code> parameter of the <code>MlsGroupCreateConfig</code>.</p>
+<p>The Delivery Service cannot guarantee that application messages will arrive in order within the same epoch. To address this, applications can configure the <code>out_of_order_tolerance</code> parameter of the <code>SenderRatchetConfiguration</code>. The configuration can be set as the <code>sender_ratchet_configuration</code> parameter of the <code>MlsGroupCreateConfig</code></p>
 </li>
 <li>
 <p>The Delivery Service cannot guarantee that application messages won’t be dropped within the same epoch. To address this, applications can configure the <code>maximum_forward_distance</code> parameter of the <code>SenderRatchetConfiguration</code>. The configuration can be set as the <code>sender_ratchet_configuration</code> parameter of the <code>MlsGroupCreateConfig</code>.</p>
 </li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="past-epoch-secret-deletion"><a class="header" href="#past-epoch-secret-deletion">Past epoch secret deletion</a></h1>
+<p>The Delivery Service may not be able to guarantee that application messages from one epoch are sent before the beginning of the next epoch. To address this, applications can configure their groups to keep the necessary key material around for past epochs by configuring the past epoch deletion policy on the <code>MlsGroupCreateConfig</code>.</p>
+<p>The <code>PastEpochDeletionPolicy</code> will be applied to the group automatically when a commit is merged.</p>
+<h2 id="setting-a-past-epoch-secrets-deletion-policy-for-a-group"><a class="header" href="#setting-a-past-epoch-secrets-deletion-policy-for-a-group">Setting a past epoch secrets deletion policy for a group</a></h2>
+<p>As part of creating a group, the <code>PastEpochDeletionPolicy</code> can be set on a group creation config:</p>
+<pre><code class="language-rust no_run noplayground">    // set up the group creation config
+    let mls_group_create_config = MlsGroupCreateConfig::builder()
+        // keep at most 3 past epoch secrets
+        .set_past_epoch_deletion_policy(PastEpochDeletionPolicy::MaxEpochs(3))
+        .ciphersuite(ciphersuite)
+        .build();</code></pre>
+<p>The policy can also be updated on an existing group:</p>
+<pre><code class="language-rust no_run noplayground">    // keep all past epoch secrets by default
+    mls_group
+        .set_past_epoch_deletion_policy(provider, PastEpochDeletionPolicy::KeepAll)
+        .expect("error setting past epoch deletion policy");
+
+    // keep a maximum of 3 past epoch secrets
+    mls_group
+        .set_past_epoch_deletion_policy(provider, PastEpochDeletionPolicy::MaxEpochs(3))
+        .expect("error setting past epoch deletion policy");</code></pre>
+<h2 id="time-based-deletion-schedules"><a class="header" href="#time-based-deletion-schedules">Time-based deletion schedules</a></h2>
+<p>It is possible to configure time-based deletion schedules for past epoch secrets. The application can periodically apply a <code>PastEpochDeletion</code> using the <code>MlsGroup::delete_past_epoch_secrets()</code> API.</p>
+<p>Generally, when time-based deletion schedules are used, it can be helpful to configure the group to use <code>PastEpochDeletionPolicy::KeepAll</code>, to ensure that automatic deletion conducted by the group is not applied early to a past epoch secret.</p>
+<p>Delete all past epoch secrets before a provided timestamp:</p>
+<pre><code class="language-rust no_run noplayground">    // delete all past epoch secrets before a timestamp
+    mls_group
+        .delete_past_epoch_secrets(provider, PastEpochDeletion::before_timestamp(timestamp))
+        .expect("error deleting past epoch secrets");</code></pre>
+<p>Delete all past epoch secrets before a provided timestamp, leaving at most a provided number of epochs:</p>
+<pre><code class="language-rust no_run noplayground">    // delete past epoch secrets before a timestamp, leaving the latest three, at most
+    mls_group
+        .delete_past_epoch_secrets(
+            provider,
+            PastEpochDeletion::before_timestamp(timestamp).max_past_epochs(3),
+        )
+        .expect("error deleting past epoch secrets");</code></pre>
+<p>Delete all past epoch secrets older than a provided duration:</p>
+<pre><code class="language-rust no_run noplayground">    // delete all past epoch secrets older than a duration
+    mls_group
+        .delete_past_epoch_secrets(
+            provider,
+            PastEpochDeletion::older_than_duration(Duration::from_hours(48)),
+        )
+        .expect("error deleting past epoch secrets");</code></pre>
+<p>Delete all past epoch secrets older than a provided duration, leaving at most a provided number of epochs:</p>
+<pre><code class="language-rust no_run noplayground">    // delete all past epoch secrets older than a duration, leaving the latest three, at most
+    mls_group
+        .delete_past_epoch_secrets(
+            provider,
+            PastEpochDeletion::older_than_duration(Duration::from_hours(48)).max_past_epochs(3),
+        )
+        .expect("error deleting past epoch secrets");</code></pre>
+<h2 id="migration-and-deleting-legacy-entries"><a class="header" href="#migration-and-deleting-legacy-entries">Migration and deleting legacy entries</a></h2>
+<p>Epoch secrets that were created using <code>openmls=0.8.1</code> or earlier will not yet include a timestamp.</p>
+<p>After migration, these may not always be deleted by applying a time-based <code>PastEpochDeletion</code>. Only if a new secret that does include a timestamp is added later, and it matches the time-based condition in the <code>PastEpochDeletion</code>, all earlier past epoch secrets without timestamps will be deleted, as well. However, otherwise, past epoch secrets without timestamps will not be affected by applying time-based <code>PastEpochDeletion</code>s.</p>
+<p>After migration, it is possible to manually delete all past epoch secrets without timestamps:</p>
+<pre><code class="language-rust no_run noplayground">    // delete all past epoch secrets without timestamps
+    mls_group
+        .delete_past_epoch_secrets(provider, PastEpochDeletion::delete_all_without_timestamps())
+        .expect("error deleting past epoch secrets");</code></pre>
+<h2 id="deleting-all-past-epoch-secrets"><a class="header" href="#deleting-all-past-epoch-secrets">Deleting all past epoch secrets</a></h2>
+<p>All past epoch secrets can also be deleted at once:</p>
+<pre><code class="language-rust no_run noplayground">    // delete all past epoch secrets
+    mls_group
+        .delete_past_epoch_secrets(provider, PastEpochDeletion::delete_all())
+        .expect("error deleting past epoch secrets");</code></pre>
+<p>Setting the group’s <code>PastEpochDeletionPolicy</code> to <code>PastEpochDeletionPolicy::MaxEpochs(0)</code> will also delete all past epoch secrets.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="virtual-clients-draft"><a class="header" href="#virtual-clients-draft">Virtual Clients (draft)</a></h1>
+<p>OpenMLS has experimental support for virtual clients, following
+<a href="https://github.com/mlswg/mls-virtual-clients">draft-ietf-mls-virtual-clients</a>.
+A virtual client lets several real clients act jointly as a single member of an
+MLS group. The group sees one leaf. Behind that leaf, any of the cooperating
+clients can speak for it.</p>
+<blockquote>
+<p><strong>This feature is a moving draft.</strong> Everything described here lives behind the
+<code>virtual-clients-draft</code> cargo feature and is not part of the stable API. Wire
+formats, storage layout, and method names can change between releases with no
+migration path. Do not assume interoperability with other implementations.</p>
+</blockquote>
+<h2 id="the-idea"><a class="header" href="#the-idea">The idea</a></h2>
+<p>The clients that cooperate to act as one member are called <em>emulator clients</em>.
+The member they present to the outside world is the <em>virtual client</em>. The
+emulator clients coordinate through a separate MLS group of their own, the
+<em>emulation group</em>, while the virtual client appears as a single leaf in one or
+more <em>higher-level groups</em>.</p>
+<p>The point of the construction is that the emulator clients never share raw
+private keys with each other. Instead they all derive the same key material
+from the emulation group’s epoch secrets, so any of them can produce a commit,
+an application message, or a KeyPackage on behalf of the virtual client, and any
+other can reproduce the matching private state. To the higher-level group, the
+result is indistinguishable from an ordinary single member.</p>
+<p>Two mechanisms make this work without secret sharing:</p>
+<ul>
+<li>A <em>Virtual Client Operation Secret Tree</em>, derived from the emulation group’s
+epoch through the Safe Exporter. It has the same shape as an MLS secret tree.
+Each emulator client’s leaf carries one ratchet per operation type
+(<code>KeyPackage</code>, <code>LeafNode</code>, <code>Application</code>). Advancing a ratchet yields an
+operation secret, and from that secret each client derives the leaf encryption
+key, init key, signature key seed, and path secrets for a single operation.</li>
+<li>A <code>DerivationInfo</code> component embedded in every leaf node the virtual client
+produces. It carries, encrypted, the derivation epoch’s <code>leaf_index</code> and the
+<code>generation</code> that was used. A sibling emulator client reads it, derives the
+same operation secret from the operation tree at that position, and so
+reconstructs the private keys for the leaf without ever receiving them.</li>
+</ul>
+<p>Each derivation epoch also produces a <code>generation_id_secret</code> (so the Delivery
+Service can detect when two emulator clients pick the same ratchet generation)
+and a <code>reuse_guard_secret</code> (so two emulator clients never reuse a key and nonce
+pair while still looking random to outside observers).</p>
+<h2 id="enabling-the-feature"><a class="header" href="#enabling-the-feature">Enabling the feature</a></h2>
+<p>Add the feature to your dependency on <code>openmls</code>:</p>
+<pre><code class="language-toml">[dependencies]
+openmls = { version = "...", features = ["virtual-clients-draft"] }
+</code></pre>
+<p>Storage backends carry their own <code>virtual-clients-draft</code> feature, which the
+<code>openmls</code> feature turns on for them. For tests that exercise the storage
+provider trait methods directly, enable
+<code>virtual-clients-draft-test-dependencies</code> on the <code>openmls</code> crate.</p>
+<h2 id="leaf-requirements"><a class="header" href="#leaf-requirements">Leaf requirements</a></h2>
+<p>Every leaf that carries virtual-client material must declare support for the
+<code>AppDataDictionary</code> extension and list the VC component id in its
+<code>AppComponents</code> entry. Build the capabilities and leaf-node extensions
+accordingly when you create or join an emulation group or a higher-level group:</p>
+<pre><code class="language-rust no_run noplayground">use openmls::component::{ComponentId, ComponentType};
+use openmls::components::vc_derivation_info::VC_COMPONENT_ID;
+use openmls::extensions::{
+    AppDataDictionary, AppDataDictionaryExtension, Extension, ExtensionType, Extensions,
+};
+use openmls::prelude::Capabilities;
+use tls_codec::Serialize as _;
+
+let capabilities = Capabilities::builder()
+    .extensions(vec![ExtensionType::AppDataDictionary])
+    .build();
+
+let supported_components: Vec&lt;ComponentId&gt; = vec![VC_COMPONENT_ID];
+let app_components_body = supported_components.tls_serialize_detached().unwrap();
+let mut dictionary = AppDataDictionary::new();
+dictionary.insert(ComponentType::AppComponents.into(), app_components_body);
+let leaf_extensions = Extensions::from_vec(vec![Extension::AppDataDictionary(
+    AppDataDictionaryExtension::new(dictionary),
+)])
+.unwrap();</code></pre>
+<p>Pass <code>capabilities</code> and <code>leaf_extensions</code> to <code>MlsGroupCreateConfig::builder()</code>
+through <code>.capabilities(...)</code> and <code>.with_leaf_node_extensions(...)</code>, and to the
+<code>KeyPackage::builder()</code> through <code>.leaf_node_capabilities(...)</code> and
+<code>.leaf_node_extensions(...)</code>.</p>
+<h2 id="derivation-epochs"><a class="header" href="#derivation-epochs">Derivation epochs</a></h2>
+<p>An emulation group is an ordinary <code>MlsGroup</code>. Each emulator client maintains its
+own copy. What makes it an emulation group is a flag every emulator client has to
+set when it creates or joins the group. The creator sets it on the create config:</p>
+<pre><code class="language-rust no_run noplayground">let create_config = MlsGroupCreateConfig::builder()
+    .emulation_group(true)
+    // ... the leaf requirements above, ciphersuite, wire format policy
+    .build();</code></pre>
+<p>A member joining by Welcome sets it on the <code>StagedWelcome</code>:</p>
+<pre><code class="language-rust no_run noplayground">let group = StagedWelcome::new_from_welcome(provider, &amp;join_config, welcome, ratchet_tree)?
+    .emulation_group(true)
+    .into_group(provider)?;</code></pre>
+<p>A member resyncing by external commit sets it on the <code>ExternalCommitBuilder</code>,
+via <code>.emulation_group(true)</code> before <code>build_group</code>.</p>
+<p>The flag is local state. Nothing about it travels on the wire, and OpenMLS does
+not verify that the other members set it. Loading a group recovers the flag from
+storage, so it only has to be set once.</p>
+<p>Virtual-client secrets are not derived from every epoch of the emulation group,
+only from its <em>derivation epochs</em>. The initial epoch is one, and so is the output
+epoch of any commit that changes membership or that carries a
+<code>new_derivation_epoch</code> action. Other commits leave the newest derivation epoch in
+place.</p>
+<p>OpenMLS registers those epochs itself: at group creation, at a Welcome join, and
+when such a commit is merged. Registration sources the root secret from the
+epoch’s Safe Exporter under <code>VC_COMPONENT_ID</code>, builds the operation secret tree,
+and persists the per-epoch state under a derived <code>EpochId</code>. Because the secret
+comes from the Safe Exporter, all emulator clients derive the <strong>same</strong> <code>EpochId</code>
+and the same operation tree for a given derivation epoch.</p>
+<p>Every new virtual-client operation uses the newest derivation epoch of the
+emulation group, as the draft requires. The sender-side entry points take the
+emulation group and resolve that epoch themselves, so an application cannot keep
+operating from an older, possibly compromised epoch. They fail with
+<code>VirtualClientsError::NoDerivationEpoch</code> if the group has none registered. To
+inspect the epoch, for example for logging, ask the emulation group:</p>
+<pre><code class="language-rust no_run noplayground">let epoch_id = emulator_group
+    .newest_vc_derivation_epoch(provider.storage())?
+    .expect("an emulation group has a derivation epoch");</code></pre>
+<p>That epoch may be older than the emulation group’s current epoch. The <code>EpochId</code>
+is the key under which all per-epoch state is stored, and it is the value
+embedded in the leaves the virtual client produces.</p>
+<p>Registration writes happen alongside the writes of the operation that triggered
+them, so wrap <code>merge_staged_commit</code> and <code>merge_pending_commit</code> calls on an
+emulation group in a storage transaction.</p>
+<p>To start a fresh derivation epoch without changing membership, for instance to
+bound the damage of a compromise, mark a commit on the emulation group:</p>
+<pre><code class="language-rust no_run noplayground">let bundle = emulator_group
+    .commit_builder()
+    .derivation_epoch(true)
+    .force_self_update(true)
+    .load_psks(provider.storage())?
+    .build(provider.rand(), provider.crypto(), &amp;emulator_signer, |_| true)?
+    .stage_commit(provider)?;</code></pre>
+<p>The marker travels in the commit’s Safe AAD, so the emulation group’s
+GroupContext has to require Safe AAD framing. Like all actions, the marker
+applies relative to the commit’s input state: operations that reference a
+derivation epoch, including ones carried by this very commit, keep using the
+input state’s newest derivation epoch.</p>
+<h2 id="committing-in-a-higher-level-group"><a class="header" href="#committing-in-a-higher-level-group">Committing in a higher-level group</a></h2>
+<p>To commit on behalf of the virtual client, set <code>vc_emulation</code> on the commit
+builder, passing the emulation group’s id. The builder resolves that group’s newest
+derivation epoch, allocates the next <code>LeafNode</code> operation generation, derives the
+new leaf’s encryption key and the first path secret from it, and embeds the
+encrypted <code>DerivationInfo</code> in the leaf:</p>
+<pre><code class="language-rust no_run noplayground">let bundle = main_group
+    .commit_builder()
+    .vc_emulation(provider.crypto(), provider.storage(), emulator_group.group_id())?
+    .load_psks(provider.storage())?
+    .build(provider.rand(), provider.crypto(), &amp;vc_signer, |_| true)?
+    .stage_commit(provider)?;
+
+main_group.merge_pending_commit(provider)?;
+let commit = bundle.into_commit();</code></pre>
+<p>Allocation advances the operation ratchet and persists it immediately, which is
+a deliberate exception to the usual rule that nothing is written before a commit
+is staged. The spec requires that a generation is never used for more than one
+operation, so the generation is consumed at allocation time. If you discard the
+builder, or the Delivery Service rejects the commit, the generation stays
+burned. <code>clear_pending_commit</code> does not roll the ratchet back. A burned
+generation is harmless, because sibling ratchets skip over it and retain the
+skipped secret.</p>
+<h2 id="processing-a-siblings-commit"><a class="header" href="#processing-a-siblings-commit">Processing a sibling’s commit</a></h2>
+<p><code>process_message</code> detects the <code>DerivationInfo</code> component in a committer’s leaf.
+If the committer’s leaf index is the receiver’s own leaf, the commit came from a
+sibling emulator client. The receiver loads the derivation epoch state, decrypts
+the derivation info, derives the same operation secret positionally from the
+operation tree (advancing or skipping the sibling’s ratchet as needed),
+reconstructs the path secrets, and processes the commit as if it had created it:</p>
+<pre><code class="language-rust no_run noplayground">let processed = receiver_group
+    .process_message(provider, commit.into_protocol_message().unwrap())?;</code></pre>
+<p>A receiver that does not hold the referenced derivation epoch state, for example
+a real member of the higher-level group that is not an emulator client,
+processes the commit as an ordinary commit. The permissive handling is framed
+around the receiver, who may not be a sibling. The sender is always a sibling.</p>
+<p>When a commit that carries a <code>DerivationInfo</code> is merged, the client stores a
+binding from <code>(GroupId, GroupEpoch)</code> to the <code>EpochId</code> from that leaf. The
+binding is keyed by epoch, not just group id, because a delayed application
+message from an earlier higher-level epoch must be processed with the derivation
+epoch that was active then. Bindings follow the same retention window as the
+message secrets store.</p>
+<h2 id="confirming-handshake-messages"><a class="header" href="#confirming-handshake-messages">Confirming handshake messages</a></h2>
+<p>When the group frames handshake messages as PrivateMessage (a ciphertext
+outgoing wire format policy), proposals and commits draw their generations from
+the per-leaf handshake ratchet, the same way application messages draw from the
+application ratchet. Like an application send, a private handshake send retains
+its key and nonce until the Delivery Service accepts it, so two emulator clients
+that race for the same handshake generation can both recover.</p>
+<p>A commit framed as PrivateMessage exposes its confirmation data on the bundle.
+Take it out with <code>take_confirmation</code> before consuming the bundle, since the
+consuming accessors (<code>into_commit</code>, <code>into_contents</code>, <code>into_messages</code>) drop the
+confirmation data:</p>
+<pre><code class="language-rust no_run noplayground">let mut bundle = main_group
+    .commit_builder()
+    .vc_emulation(provider.crypto(), provider.storage(), emulator_group.group_id())?
+    .load_psks(provider.storage())?
+    .build(provider.rand(), provider.crypto(), &amp;vc_signer, |_| true)?
+    .stage_commit(provider)?;
+
+if let Some(confirmation) = bundle.take_confirmation() {
+    // Attach confirmation.generation_id when fanning out the commit, so the
+    // Delivery Service can detect a generation collision with a sibling.
+    send_to_delivery_service(bundle.into_commit(), confirmation.generation_id.clone());
+}</code></pre>
+<p>For standalone proposals, <code>propose_unconfirmed</code> mirrors <code>propose</code> but also
+returns the confirmation data alongside the framed proposal:</p>
+<pre><code class="language-rust no_run noplayground">let (proposal, proposal_ref, confirmation) = main_group.propose_unconfirmed(
+    provider,
+    &amp;vc_signer,
+    Propose::Add(key_package),
+    ProposalOrRefType::Reference,
+)?;</code></pre>
+<p>The confirmation from either path is <code>Some</code> when the message was framed as
+PrivateMessage and <code>None</code> when it was framed as a plaintext PublicMessage. As
+with application messages, the <code>generation_id</code> is <code>Some</code> only on a group bound
+to a derivation epoch.</p>
+<p>Once the Delivery Service accepts the message, drop the retained key with
+<code>confirm_handshake_message</code>, passing the confirmation’s <code>epoch</code> and
+<code>generation</code>:</p>
+<pre><code class="language-rust no_run noplayground">main_group.confirm_handshake_message(
+    provider.storage(),
+    confirmation.epoch,
+    confirmation.generation,
+)?;</code></pre>
+<p>The epoch carried by a commit’s confirmation is the epoch the commit was
+encrypted in, which is the epoch before the commit is merged. Confirming is
+epoch-scoped, so it stays correct even when called after the merge has advanced
+the group to a later epoch. Proposals and commits share the handshake ratchet,
+so this single endpoint covers both.</p>
+<h3 id="classic-proposal-functions"><a class="header" href="#classic-proposal-functions">Classic proposal functions</a></h3>
+<p>The classic proposal functions (<code>propose</code>, <code>propose_add_member</code>,
+<code>propose_self_update</code>, <code>propose_self_update_with_new_signer</code>,
+<code>propose_group_context_extensions</code>, <code>leave_group</code>, and the rest) are not
+available with the feature, the same way the committing convenience functions
+are not. They return only the framed <code>MlsMessageOut</code> and discard the handshake
+confirmation data.</p>
+<p>Use <code>propose_unconfirmed</code> instead. It retains the handshake secret and returns
+the confirmation data alongside the framed proposal, which you confirm with
+<code>confirm_handshake_message</code> once the Delivery Service accepts the send. For a
+signature-key rotation use <code>propose_self_update_with_new_signer_unconfirmed</code>,
+which returns the same confirmation data.</p>
+<p><code>propose_unconfirmed</code> dispatches on the <code>Propose</code> variant, so it also covers
+<code>Propose::GroupContextExtensions</code> and the AppDataDictionary update variants.</p>
+<p>The committing convenience functions (<code>add_members</code>, <code>add_members_without_update</code>,
+<code>swap_members</code>, <code>remove_members</code>, <code>self_update</code>, <code>self_update_with_new_signer</code>,
+<code>commit_to_pending_proposals</code>, and <code>update_group_context_extensions</code>) are not
+available with the feature. They return only the commit and discard its
+confirmation data. Build commits through <code>commit_builder</code> instead, and read the
+confirmation from the bundle’s <code>confirmation()</code> as shown above.</p>
+<h2 id="application-messages-1"><a class="header" href="#application-messages-1">Application messages</a></h2>
+<p>With the feature enabled, the single-shot <code>create_message</code> is replaced by a two
+step send flow, because two emulator clients can race for the same ratchet
+generation.</p>
+<p><code>create_unconfirmed_message</code> encrypts the payload, retains the key and nonce,
+and returns the message together with the ratchet <code>generation</code> and a
+<code>generation_id</code>:</p>
+<pre><code class="language-rust no_run noplayground">let unconfirmed = main_group
+    .create_unconfirmed_message(provider, &amp;vc_signer, b"hello")?;
+
+// Attach unconfirmed.generation_id when fanning out, so the Delivery Service
+// can detect a generation collision with a sibling.
+send_to_delivery_service(unconfirmed.message, unconfirmed.generation_id);</code></pre>
+<p>The <code>generation_id</code> is <code>Some</code> on a group bound to a derivation epoch and <code>None</code>
+otherwise. It is derived from <code>generation_id_secret</code> over the spec’s
+<code>PrivateMessageContext</code>. The reuse guard is computed rather than sampled: the
+client resolves the derivation epoch through the <code>(GroupId, GroupEpoch)</code> binding,
+picks a value congruent to its emulation leaf index modulo the emulation group
+size, and encrypts it with a small-space PRP keyed from <code>reuse_guard_secret</code>.</p>
+<p>Once the Delivery Service accepts the message, drop the retained key:</p>
+<pre><code class="language-rust no_run noplayground">main_group.confirm_application_message(provider.storage(), unconfirmed.epoch, unconfirmed.generation)?;</code></pre>
+<p>If the Delivery Service reports a collision, the sibling won that generation.
+Process the winning message through <code>process_message</code>, which has a carve-out for
+messages arriving from the receiver’s own leaf. Decrypting the winner consumes
+the retained key for that generation, so no explicit cleanup is needed. Then
+call <code>create_unconfirmed_message</code> again to re-encrypt from the ratchet head.
+There is no explicit discard call. A retained unconfirmed key is, from the
+receiving side, the same as a skipped-generation key. It is cleaned up by
+<code>confirm_application_message</code>, by decrypting a sibling’s message at that
+generation, or by
+aging out under bounded retention.</p>
+<p>On the receiving side, <code>process_message</code> inverts the reuse guard PRP and
+recovers the sender’s leaf index in the emulation group, so the application can
+attribute the message to a specific emulator client:</p>
+<pre><code class="language-rust no_run noplayground">let processed = receiver_group
+    .process_message(provider, message.into_protocol_message().unwrap())?;
+
+if let Some(emulation_leaf) = processed.emulator_sender_leaf_index() {
+    // The message came from this emulator client of the virtual client.
+}</code></pre>
+<p><code>emulator_sender_leaf_index()</code> returns <code>None</code> for messages that did not come
+from a virtual client, or on a group with no emulation binding.</p>
+<h2 id="keypackages-and-welcomes"><a class="header" href="#keypackages-and-welcomes">KeyPackages and Welcomes</a></h2>
+<p>A virtual client publishes KeyPackages so that a sibling can later recover the
+private keys and join a higher-level group on its behalf. KeyPackages are built
+in batches, because one <code>key_package</code> operation generation seeds a whole batch.</p>
+<p>Build the batch with <code>build_vc_batch</code>. It allocates one <code>key_package</code>
+generation, derives a per-KeyPackage seed for each index, embeds a
+<code>DerivationInfo</code> in every leaf, writes each bundle to local storage, and returns
+the <code>generation</code> plus one <code>(KeyPackageBundle, KeyPackageInfo)</code> per KeyPackage:</p>
+<pre><code class="language-rust no_run noplayground">let batch = KeyPackage::builder()
+    .leaf_node_capabilities(capabilities)
+    .leaf_node_extensions(leaf_extensions)?
+    .build_vc_batch(
+        ciphersuite,
+        provider,
+        &amp;vc_signer,
+        vc_credential,
+        emulator_group.group_id(),
+        count, // number of KeyPackages, must be &gt; 0
+    )?;</code></pre>
+<p>The operation tree is advanced in memory and persisted only after every
+KeyPackage is built, so a build failure consumes no generation. A <code>count</code> of <code>0</code>
+returns <code>EmptyBatch</code> before any state is touched.</p>
+<p>Assemble the upload the virtual client hands to its sibling from the batch’s
+epoch and generation and its <code>KeyPackageInfo</code>s. Take the epoch from the batch
+rather than resolving it again: the emulation group may have moved on to a newer
+derivation epoch in the meantime. OpenMLS fills the emulation <code>leaf_index</code> from
+the stored epoch state:</p>
+<pre><code class="language-rust no_run noplayground">use openmls::components::vc_derivation_info::assemble_vc_key_package_upload;
+
+let infos = batch
+    .key_packages
+    .iter()
+    .map(|(_bundle, info)| info.clone())
+    .collect();
+
+let upload = assemble_vc_key_package_upload(
+    provider.storage(),
+    batch.epoch_id.clone(),
+    batch.generation,
+    infos,
+)?;</code></pre>
+<p>How the upload reaches the sibling emulator clients is up to the application. It
+must reach them before the KeyPackages are offered to anyone else. On receipt, a
+sibling calls <code>process_vc_key_package_upload</code>, which derives the init and leaf
+encryption private keys for each listed reference and stores them keyed by
+<code>KeyPackageRef</code>:</p>
+<pre><code class="language-rust no_run noplayground">use openmls::components::vc_derivation_info::process_vc_key_package_upload;
+
+process_vc_key_package_upload(provider, &amp;upload)?;</code></pre>
+<p>After that, Welcome processing runs through the ordinary <code>ProcessedWelcome</code> and
+<code>StagedWelcome</code> entry points unchanged. The lookup by <code>KeyPackageRef</code> finds
+either a locally generated <code>KeyPackageBundle</code> or the derived virtual-client key
+material. Eager derivation costs no forward secrecy: the derived private keys
+take the place of any retained operation secret and have to be kept until the
+KeyPackage is no longer live anyway.</p>
+<h2 id="what-is-not-implemented-yet"><a class="header" href="#what-is-not-implemented-yet">What is not implemented yet</a></h2>
+<p>The implementation tracks the draft but does not yet cover everything in it:</p>
+<ul>
+<li>Onboarding a new emulator client by state transfer (the draft’s
+<code>NewEmulatorClientState</code>, Variant A) is not implemented. Onboarding through an
+external commit (Variant B) works, because it is an application-orchestrated
+sequence of operations the code already supports.</li>
+<li>VC Update proposals are not implemented. Only commits and external commits
+emit virtual-client leaves.</li>
+<li>The <code>VirtualClientAction</code> coordination channel over SafeAAD (the draft’s
+<code>external_join</code> and <code>key_package_upload</code> actions) is not implemented. The
+transport of the KeyPackage upload is left entirely to the application.</li>
+<li>Per-epoch state for dead derivation epochs is not garbage collected
+automatically.</li>
+</ul>
+<p>Refer to the <a href="https://github.com/mlswg/mls-virtual-clients">virtual clients draft</a>
+for the authoritative protocol description.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="release-management"><a class="header" href="#release-management">Release management</a></h1>
 <p>The process for releasing a new version of OpenMLS.</p>
@@ -2959,13 +3879,16 @@ Pre-releases must be tagged but don’t require release notes or other documenta
 It is also sufficient to tag only the most high-level crate being published.</p>
 <hr>
 <h2 id="crates-in-this-repository"><a class="header" href="#crates-in-this-repository">Crates in this Repository</a></h2>
-<p>The crates must be published in the order below.</p>
-<ul>
-<li><a href="https://github.com/openmls/openmls/blob/main/traits/Cargo.toml">Traits</a></li>
-<li><a href="https://github.com/openmls/openmls/blob/main/memory_storage/Cargo.toml">Memory storage</a></li>
-<li><a href="https://github.com/openmls/openmls/blob/main/openmls_rust_crypto/Cargo.toml">Rust Crypto provider</a></li>
-<li><a href="https://github.com/openmls/openmls/blob/main/openmls/Cargo.toml">OpenMLS</a></li>
-</ul>
+<p>Publish the workspace with:</p>
+<pre><code class="language-sh">cargo publish --workspace
+</code></pre>
+<p>This publishes every workspace member that isn’t marked <code>publish = false</code> (currently: <code>traits</code>, <code>memory_storage</code>, <code>openmls_rust_crypto</code>, <code>libcrux_crypto</code>, <code>basic_credential</code>, <code>openmls_test</code>, <code>sqlite_storage</code>, <code>serialization_helpers</code>, <code>openmls</code>), resolving the dependency order automatically — you no longer need to publish crate-by-crate in a fixed order. Use <code>--dry-run</code> first to verify everything resolves before publishing for real.</p>
+<p><code>openmls_sqlx_storage</code> is <strong>not</strong> a workspace member (it’s excluded in the root <code>Cargo.toml</code> due to build conflicts) and is not covered by <code>cargo publish --workspace</code>. Publish it separately:</p>
+<pre><code class="language-sh">cd sqlx_storage
+cargo publish --dry-run
+cargo publish
+</code></pre>
+<p>Its only workspace dependency is <code>openmls_traits</code>, so publish it any time after <code>traits</code> has gone out — either before or after the <code>--workspace</code> batch.</p>
 <h2 id="release-note-and-changelog-template"><a class="header" href="#release-note-and-changelog-template">Release note and changelog template</a></h2>
 <pre><code class="language-markdown">## 0.0.0 (2022-02-22)
 
@@ -3005,8 +3928,80 @@ It is also sufficient to tag only the most high-level crate being published.</p>
 <li><input disabled="" type="checkbox"> Describe the release in the CHANGELOG.md file of each crate.</li>
 <li><input disabled="" type="checkbox"> Create and publish a git tag for each crate, e.g. <code>openmls/v0.4.0-rc.99</code>.</li>
 <li><input disabled="" type="checkbox"> Create and publish release notes on Github.</li>
-<li><input disabled="" type="checkbox"> Publish the crates to crates.io</li>
+<li><input disabled="" type="checkbox"> Publish the workspace with <code>cargo publish --workspace</code> (see <a href="#crates-in-this-repository">Crates in this Repository</a> above), then publish <code>openmls_sqlx_storage</code> separately.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="releases"><a class="header" href="#releases">Releases</a></h1>
+<p>Release notes for <code>openmls</code>, one page per version.</p>
+<ul>
+<li><a href="#090-2026-08-03">0.9.0</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="090-2026-08-03"><a class="header" href="#090-2026-08-03">0.9.0 (2026-08-03)</a></h1>
+<blockquote>
+<p>This release is going out first as <code>0.9.0-rc.1</code>, per the <a href="#release-management">pre-release strategy</a>. The final <code>0.9.0</code> tag will follow after the rc is deemed good.</p>
+</blockquote>
+<h2 id="highlights"><a class="header" href="#highlights">Highlights</a></h2>
+<ul>
+<li><strong>Storage.</strong> Non-self describing storage formats are officially not supported anymore in OpenMLS starting with this release.</li>
+<li><strong>Storage migration helper.</strong> A new opt-in <code>migration-import</code> feature lets applications move existing group state to a storage provider using a different serde codec (e.g. bincode -&gt; CBOR), via new import entry points on <code>MlsGroup</code> and <code>PublicGroup</code>. See <a href="#migrating-the-storage-provider">Migrating from a previous version</a>.</li>
+<li><strong>Targeted messages.</strong> Initial support for targeted messages, behind the new <code>targeted-messages-draft</code> feature flag.</li>
+<li><strong>Reworked <code>AppDataUpdate</code> processing.</strong> Both <code>MlsGroup</code> and <code>PublicGroup</code> now return commits carrying <code>AppDataUpdate</code> proposals as <code>ProcessedMessageContent::UnresolvedAppDataCommit</code>, replacing the previous <code>unprotect_message</code>/<code>process_unverified_message_with_app_data_updates</code> flow that exposed unverified content.</li>
+<li><strong>MSRV raised to Rust 1.91.</strong></li>
+</ul>
+<h2 id="added"><a class="header" href="#added">Added</a></h2>
+<ul>
+<li><a href="https://github.com/openmls/openmls/pull/1972">#1972</a>: APIs for time-based deletion of past epoch secrets, and for setting the past epoch deletion policy for an <code>MlsGroup</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2010">#2010</a>: <code>MlsGroup::propose_self_update_with_new_signer</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2084">#2084</a>: <code>ProcessedMessageContent::OwnPendingCommit</code> variant.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2109">#2109</a>: <code>Capabilities::for_provider</code>, plus dedicated <code>UnsupportedCiphersuite</code> errors returned early when a provider doesn’t support a requested ciphersuite.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2099">#2099</a>: <code>ProcessedMessageContent::OwnPrivateMessage</code> variant for processing echoed-back own messages.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2128">#2128</a>: Storage-format migration helper (<code>migration-import</code> feature).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2028">#2028</a>: Targeted messages (<code>targeted-messages-draft</code> feature).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2046">#2046</a>, <a href="https://github.com/openmls/openmls/pull/2118">#2118</a>: P-384, ML-DSA and additional PQ ciphersuites.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2037">#2037</a>: Safe AAD capabilities from the extensions draft.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2045">#2045</a>: Unchecked constructors to bypass <code>KeyPackage</code>/<code>LeafNode</code> validation for already-verified input.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2095">#2095</a>: <code>AppDataUpdate</code> proposals allowed in external commits; group-context getter on <code>VerifiableGroupInfo</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/1979">#1979</a>: Application data dictionary extension in key packages.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2113">#2113</a>: <code>VcKeyPackageBatchBuilder</code> for virtual clients (experimental).</li>
+</ul>
+<h2 id="changed"><a class="header" href="#changed">Changed</a></h2>
+<ul>
+<li><a href="https://github.com/openmls/openmls/pull/2109">#2109</a>: Group/key-package creation, welcome processing, external commits and <code>PublicGroup</code> creation now fail early with <code>UnsupportedCiphersuite</code> instead of failing deep in a crypto operation.</li>
+<li><a href="https://github.com/openmls/openmls/pull/1980">#1980</a>: Enriched lifetime-related leaf node validation errors.</li>
+<li><a href="https://github.com/openmls/openmls/pull/1972">#1972</a>: <code>MlsGroup::max_past_epochs()</code> now returns <code>Option&lt;usize&gt;</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/1963">#1963</a>: <code>MessageEncryptionError</code> is now public (behind <code>virtual-clients-draft</code>).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2043">#2043</a>: Renamed and deprecated <code>MlsGroup::propose_external_psk</code> to <code>propose_pre_shared_key</code> (and the <code>_by_value</code> variant).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2084">#2084</a>: Renamed <code>StageCommitError::OwnCommit</code> to <code>OwnCommitMismatch</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2099">#2099</a>: Removed <code>ValidationError::CannotDecryptOwnMessage</code> — processing an own <code>PrivateMessage</code> is no longer an error.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2060">#2060</a>: Renamed the <code>extensions-draft-08</code> feature flag to <code>extensions-draft</code> (across the <code>openmls</code>, <code>openmls_sqlite_storage</code> and <code>openmls_sqlx_storage</code> crates).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2092">#2092</a>, <a href="https://github.com/openmls/openmls/pull/2098">#2098</a>, <a href="https://github.com/openmls/openmls/pull/2099">#2099</a>: Reworked the <code>AppDataUpdate</code> receive-side API on <code>MlsGroup</code> and <code>PublicGroup</code> (see Highlights above).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2083">#2083</a>: Raised MSRV to Rust 1.91.</li>
+</ul>
+<h2 id="fixed"><a class="header" href="#fixed">Fixed</a></h2>
+<ul>
+<li><a href="https://github.com/openmls/openmls/pulls/2186">#2186</a>: Fix wrong computation of tree node indexes when provided invalid inputs.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2134">#2134</a>: Known structured extension payloads now reject trailing bytes during decoding.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2109">#2109</a>: <code>OpenMlsRustCrypto</code>’s <code>supports()</code> now agrees with <code>supported_ciphersuites()</code> for <code>MLS_256_MLKEM1024_AES256GCM_SHA512_MLDSA87</code>.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2089">#2089</a>: A Commit without an UpdatePath from this client’s own leaf that doesn’t match the pending commit is now staged normally instead of rejected.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2034">#2034</a>: Fixed incorrect storage-format deserialization caused by changed integer storage tags; storage-format compatibility with <code>openmls</code> v0.7.1 and earlier is restored by default (<code>0-8-1-storage-format</code> feature keeps v0.8.1 compatibility).</li>
+<li><a href="https://github.com/openmls/openmls/pull/2125">#2125</a>: A bare <code>GroupContextExtensions</code> proposal could bypass the <code>AppDataUpdate</code> immutability check on the <code>app_data_dictionary</code> extension.</li>
+<li><a href="https://github.com/openmls/openmls/pull/2051">#2051</a>: Backward-incompatible deserialization of <code>PastEpochDeletionPolicy</code>.</li>
+</ul>
+<h2 id="supporting-crates"><a class="header" href="#supporting-crates">Supporting crates</a></h2>
+<p>None of these contain breaking changes to their own <em>stable</em> public APIs — all additive (new PQ ciphersuite support, virtual-clients-draft storage plumbing) or internal fixes. Several also carry the <code>extensions-draft-08</code> → <code>extensions-draft</code> feature-flag rename from #2060 (an unstable/draft feature that was never part of a stable release):</p>
+<ul>
+<li><code>openmls_traits</code> 0.6.0 (feature-flag rename, new PQ/virtual-clients/targeted-messages draft feature flags)</li>
+<li><code>openmls_memory_storage</code> 0.6.0 (feature-flag rename, new features)</li>
+<li><code>openmls_rust_crypto</code> 0.6.0</li>
+<li><code>openmls_libcrux_crypto</code> 0.4.0 (feature-flag rename, new features, fix)</li>
+<li><code>openmls_basic_credential</code> 0.6.0</li>
+<li><code>openmls_sqlite_storage</code> 0.3.0 (feature-flag rename, new features)</li>
+<li><code>openmls_sqlx_storage</code> 0.3.0 (feature-flag rename <code>extensions-draft-08</code> → <code>extensions-draft</code>)</li>
+<li><code>openmls_test</code> 0.3.0 (dev-only)</li>
+<li><code>openmls_serialization_helpers</code> 0.1.0 (new crate)</li>
+</ul>
+<p>See each crate’s own <code>CHANGELOG.md</code> for details.</p>
 
                     </main>
 
@@ -3040,11 +4035,11 @@ It is also sufficient to tag only the most high-level crate being published.</p>
 
         <script src="elasticlunr-ef4e11c1.min.js"></script>
         <script src="mark-09e88c2c.min.js"></script>
-        <script src="searcher-c2a407aa.js"></script>
+        <script src="searcher-09f2665d.js"></script>
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-a0b12cfe.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 
